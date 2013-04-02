@@ -44,10 +44,11 @@ elgg.ggouv_pad.init = function() {
 elgg.register_hook_handler('init', 'system', elgg.ggouv_pad.init);
 
 elgg.ggouv_pad.resize = function() {
-	if ( $('iframe.etherpad').length ) {
+	if ( $('iframe.etherpad').length != 0) {
 		$('.elgg-page-body').css('position', 'fixed');
 		$('iframe.etherpad').height($(window).height() - $('iframe.etherpad').position().top - 58);
-	}
+	}else
+          $('.elgg-page-body').css('position', 'relative');
 }
 
 
