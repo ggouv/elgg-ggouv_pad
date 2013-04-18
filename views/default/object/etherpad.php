@@ -67,7 +67,13 @@ if (elgg_in_context('widgets')) {
 
 if ($full) {
 	try {
-		$body .= elgg_view('output/iframe', array('value' => $etherpad->getPadPath($timeslider), 'type' => "etherpad"));
+		$body .= elgg_view('output/iframe', array(
+			'value' => $etherpad->getPadPath($timeslider),
+			'class' => 'etherpad mtm',
+			'width' => '100%',
+			'height' => '400px',
+			'frameborder' => '0'
+		));
 	} catch(Exception $e) {
 		$body .= $e->getMessage();
 	}
