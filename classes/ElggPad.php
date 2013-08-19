@@ -160,4 +160,29 @@ class ElggPad extends ElggObject {
 			return $this->getReadOnlyAddress() . $options;
 		}
 	}
+
+	function getPadText(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->getText($padID)->text;
+	}
+
+	function getPadHTML(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->getHTML($padID)->html;
+	}
+
+	function getPadMarkdown(){
+		elgg_load_library('etherpad:markdownify');
+
+		$html = $this->getPadHTML();
+		if (ini_get('magic_quotes_gpc')) {
+			$html = stripslashes($html);
+		}
+
+		$md = new Markdownify_Extra(false, false, false);
+		return $md->parseString($html);
+	}
 }
+
+
+

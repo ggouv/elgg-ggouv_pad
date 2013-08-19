@@ -11,6 +11,7 @@ elgg_register_event_handler('init', 'system', 'etherpad_init');
 function etherpad_init() {
 
 	elgg_register_library('etherpad:utilities', elgg_get_plugins_path() . 'elgg-ggouv_pad/lib/utilities.php');
+	elgg_register_library('etherpad:markdownify', elgg_get_plugins_path() . 'elgg-ggouv_pad/vendors/markdownify/markdownify_extra.php');
 
 	$actions_base = elgg_get_plugins_path() . 'elgg-ggouv_pad/actions/etherpad';
 	elgg_register_action("etherpad/save", "$actions_base/save.php");

@@ -48,10 +48,10 @@ if (!isset($vars['entity']->new_pad_text)) {
 
 <div>
     <label><?php echo elgg_echo('etherpad:newpadtext'); ?></label><br />
-    <?php echo elgg_view('input/text',array('name' => 'params[new_pad_text]', 'value' => $vars['entity']->new_pad_text, 'class' => 'text_input',)); ?>
+    <?php echo elgg_view('input/longtext',array('name' => 'params[new_pad_text]', 'value' => $vars['entity']->new_pad_text, 'class' => 'text_input',)); ?>
 </div>
 
-<div>
+<div style="clear:both;">
     <label><?php echo elgg_echo('etherpad:showcontrols'); ?></label><br />
     <?php echo elgg_view('input/dropdown', array(
 	'name' => 'params[show_controls]',
