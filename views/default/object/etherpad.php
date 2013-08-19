@@ -34,7 +34,7 @@ $editor_link = elgg_view('output/url', array(
 ));
 
 $date = elgg_view_friendly_time($etherpad->time_created);
-$editor_text = elgg_echo('pages:strapline', array($date, $editor_link));
+$editor_text = elgg_echo('byline', array($editor_link));
 $tags = elgg_view('output/tags', array('tags' => $etherpad->tags));
 $categories = elgg_view('output/categories', $vars);
 
@@ -51,14 +51,14 @@ if ($comments_count != 0) {
 	$comments_link = '';
 }
 
-$metadata = elgg_view_menu('etherpad', array(
-	'entity' => $vars['entity'],
+$metadata = elgg_view_menu('entity', array(
+	'entity' => $etherpad,
 	'handler' => 'etherpad',
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-entity elgg-menu-hz',
 ));
 
-$subtitle = "$editor_text $comments_link $categories";
+$subtitle = "$editor_text $date $comments_link $categories";
 
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) {
@@ -75,7 +75,7 @@ if ($full) {
 			'frameborder' => '0'
 		));
 	} catch(Exception $e) {
-		$body .= $e->getMessage();
+		$body .= elgg_echo('etherpad:'. $e->getMessage());
 	}
 	$params = array(
 		'entity' => $etherpad,

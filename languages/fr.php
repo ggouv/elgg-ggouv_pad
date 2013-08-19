@@ -1,7 +1,7 @@
 <?php
 /**
  * Etherpads French language file
- * 
+ *
  * package ElggPad
  */
 
@@ -10,7 +10,7 @@ $french = array(
 	/**
 	 * Menu items and titles
 	 */
-	 
+
 	'etherpad' => "Pads",
 	'etherpad:owner' => "Pads de %s",
 	'etherpad:friends' => "Pads de vos abonnements",
@@ -19,17 +19,17 @@ $french = array(
 	'etherpad:timeslider' => 'Historique',
 	'etherpad:fullscreen' => 'Plein écran',
 	'etherpad:none' => "Aucun pad n'a été créé pour l'instant.",
-	
+
 	'etherpad:group' => 'Pads du groupe',
 	'groups:enablepads' => 'Activer les pads pour le groupe',
-	
+
 	/**
 	 * River
 	 */
 	'river:create:object:etherpad' => "%s a créé le pad %s",
 	'river:update:object:etherpad' => "%s a mis à jour le pad %s",
 	'river:comment:object:etherpad' => "%s a commenté le pad %s",
-	
+
 	'item:object:etherpad' => 'Pads',
 
 	/**
@@ -39,11 +39,12 @@ $french = array(
 	'etherpad:saved' => "Le pad a été enregistré.",
 	'etherpad:delete:success' => "Le pad a été supprimé.",
 	'etherpad:delete:failure' => "Le pad ne peux pas être supprimé.",
-	
+	'etherpad:Empty or No Response from the server' => "Le serveur de pads semble être à l'arrêt. Contactez un membre du groupe !dev pour plus d'informations...",
+
 	/**
 	 * Edit page
 	 */
-	 
+
 	'etherpad:title' => "Titre",
 	'etherpad:description' => "Description",
 	'etherpad:tags' => "Tags",
@@ -63,7 +64,7 @@ $french = array(
 	'etherpad:showcomments' => "Afficher les commentaires ?",
 	'etherpad:newpadtext' => "Text dans un nouveau pad :",
 	'etherpad:pad:message' => 'Le nouveau pad a été créé.',
-	
+
 	/**
 	 * Widget
 	 */

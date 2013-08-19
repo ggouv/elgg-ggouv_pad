@@ -4,24 +4,24 @@
  *
  * @package etherpad
  */
- 
+
 elgg_register_event_handler('init', 'system', 'etherpad_init');
 
 
 function etherpad_init() {
-	
+
 	elgg_register_library('etherpad:utilities', elgg_get_plugins_path() . 'elgg-ggouv_pad/lib/utilities.php');
-	
+
 	$actions_base = elgg_get_plugins_path() . 'elgg-ggouv_pad/actions/etherpad';
 	elgg_register_action("etherpad/save", "$actions_base/save.php");
 	elgg_register_action("etherpad/delete", "$actions_base/delete.php");
-	
+
 	elgg_register_page_handler('pad', 'etherpad_page_handler');
-	
+
 	// Extend view
-	//elgg_extend_view('css/elgg', 'workflow/css');
+	elgg_extend_view('css/elgg', 'etherpad/css');
 	elgg_extend_view('js/elgg', 'etherpad/js');
-	
+
 	// Language short codes must be of the form "etherpad:key"
 	// where key is the array key below
 	elgg_set_config('etherpad', array(
@@ -31,28 +31,28 @@ function etherpad_init() {
 		'access_id' => 'access',
 		'write_access_id' => 'access',
 	));
-	
+
 	elgg_register_plugin_hook_handler('register', 'menu:etherpad', 'etherpad_entity_menu');
-	
+
 	elgg_register_entity_type('object', 'etherpad', 'ElggPad');
-	
+
 	// write permission plugin hooks
 	elgg_register_plugin_hook_handler('permissions_check', 'object', 'etherpad_write_permission_check');
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'etherpad_container_permission_check');
-	
+
 	//Widget
 	elgg_register_widget_type('etherpad', elgg_echo('etherpad'), elgg_echo('etherpad:profile:widgetdesc'));
-	
+
 	// don't need it for ggouv
 //	$item = new ElggMenuItem('etherpad', elgg_echo('etherpad'), 'etherpad/all');
 //	elgg_register_menu_item('site', $item);
-	
+
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'etherpad_owner_block_menu');
-	
+
 	// add to groups
 	add_group_tool_option('etherpad', elgg_echo('groups:enablepads'), true);
 	elgg_extend_view('groups/tool_latest', 'etherpad/group_module');
-	
+
 	// Register a URL handler for bookmarks
 	elgg_register_entity_url_handler('object', 'etherpad', 'etherpad_url');
 
@@ -112,7 +112,7 @@ function etherpad_page_handler($page, $handler) {
  */
 function etherpad_entity_menu($hook, $type, $return, $params) {
 	$entity = $params['entity'];
-	
+
 	if (elgg_in_context('widgets')) {
 		return $return;
 	}
@@ -120,12 +120,13 @@ function etherpad_entity_menu($hook, $type, $return, $params) {
 	if ($entity->getSubtype() != 'etherpad') {
 		return $return;
 	}
-	
+
 	// access
 	$access = elgg_view('output/access', array('entity' => $entity));
 	$options = array(
 		'name' => 'access',
 		'text' => $access,
+		'item_class' => 'prm',
 		'href' => false,
 		'priority' => 100,
 	);
@@ -135,7 +136,7 @@ function etherpad_entity_menu($hook, $type, $return, $params) {
 		// edit link
 		$options = array(
 			'name' => 'edit',
-			'text' => 'e',
+			'text' => '&#9998;', // unicode 270E
 			'title' => elgg_echo('edit:this'),
 			'class' => 'gwf tooltip s',
 			'href' => "pad/edit/{$entity->getGUID()}",
@@ -155,16 +156,6 @@ function etherpad_entity_menu($hook, $type, $return, $params) {
 		);
 		$return[] = ElggMenuItem::factory($options);
 	}
-
-	// fullscreen button
-	$entity = new ElggPad($entity->guid);
-	$options = array(
-		'name' => 'etherpadfs',
-		'text' => elgg_echo('etherpad:fullscreen'),
-		'href' => $entity->getPadPath(),
-		'priority' => 200,
-	);
-	$return[] = ElggMenuItem::factory($options);
 
 	return $return;
 }
@@ -194,7 +185,7 @@ function etherpad_notify_message($hook, $entity_type, $returnvalue, $params) {
 
 /**
  * Override the etherpad url
- * 
+ *
  * @param ElggObject $entity Pad object
  * @return string
  */
