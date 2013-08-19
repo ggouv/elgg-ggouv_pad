@@ -29,7 +29,7 @@ elgg_push_breadcrumb($title);
 $content = elgg_view_entity($pad, array('full_view' => true));
 
 if ($pad->getSubtype() == 'etherpad' && elgg_get_plugin_setting('show_comments', 'elgg-ggouv_pad') == 'yes') {
-	$content .= elgg_view_comments($pad, true, array('class' => 'hidden'));
+	$content .= elgg_view_comments($pad, true);
 }
 
 $body = elgg_view_layout('content', array(
