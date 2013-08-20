@@ -22,6 +22,8 @@ $english = array(
 
 	'etherpad:group' => 'Group pads',
 	'groups:enablepads' => 'Enable group pads',
+	'etherpad:toggle_comment' => "Show/hide comments",
+
 
 	/**
 	 * River

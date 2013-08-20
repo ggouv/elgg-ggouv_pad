@@ -43,8 +43,7 @@ elgg.ggouv_pad.reload = function() {
 		$('iframe.etherpad').height($(window).height() - $('iframe.etherpad').position().top - 58);
 		$('.elgg-comments').addClass('hidden');
 
-		$('.elgg-content .elgg-subtext a[href*="comments"]').die().live('click', function() {
-			console.log('uieuie');
+		$('.elgg-content .elgg-subtext a[href*="comments"], .elgg-menu-item-toggle-comment a').die().live('click', function() {
 			if ($('iframe.etherpad').hasClass('hidden')) {
 				$('body').addClass('fixed-pad');
 				$('iframe.etherpad').removeClass('hidden');
