@@ -182,6 +182,48 @@ class ElggPad extends ElggObject {
 		$md = new Markdownify_Extra(false, false, false);
 		return $md->parseString($html);
 	}
+
+	function getPadUsers(){ // doesn't work ??
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->padUsers($padID);
+	}
+
+	function getLastEdited(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->getLastEdited($padID)->lastEdited;
+	}
+
+	function getPadUsersCount(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->padUsersCount($padID)->padUsersCount;
+	}
+
+	function sendClientsMessage($msg){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->sendClientsMessage($padID, $msg);
+	}
+
+	function listAuthorsOfPad(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->listAuthorsOfPad($padID)->authorIDs;
+	}
+
+	function listAuthorsNamesOfPad(){
+		$authorsID = $this->listAuthorsOfPad();
+		foreach($authorsID as $authorID) {
+			$authorsNames[] = $this->getAuthorName($authorID);
+		}
+		return $authorsNames;
+	}
+
+	function getRevisionsCount(){
+		$padID = $this->getMetadata('pname');
+		return $this->get_pad_client()->getRevisionsCount($padID)->revisions;
+	}
+
+	function getAuthorName($authorID){
+		return $this->get_pad_client()->getAuthorName($authorID);
+	}
 }
 
 
