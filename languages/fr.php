@@ -23,6 +23,10 @@ $french = array(
 	'etherpad:group' => 'Pads du groupe',
 	'groups:enablepads' => 'Activer les pads pour le groupe',
 	'etherpad:toggle_comment' => "Afficher/masquer les commentaires",
+	'etherpad:infos' => "Informations",
+	'etherpad:lastedited' => "Dernière édition %s",
+	'etherpad:revisions' => "%s révisions",
+	'etherpad:contributors' => "Ont contribué à ce pad :",
 
 	/**
 	 * River

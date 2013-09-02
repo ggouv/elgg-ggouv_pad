@@ -11,8 +11,6 @@ if (!$pad) {
 	forward();
 }
 
-elgg_set_page_owner_guid($pad->getContainerGUID());
-
 group_gatekeeper();
 
 $container = elgg_get_page_owner_entity();
@@ -37,13 +35,12 @@ if ($pad->getSubtype() == 'etherpad' && elgg_get_plugin_setting('show_comments',
 		'text' => elgg_echo('etherpad:toggle_comment'),
 	));
 }
-
-
-
+ 
 $body = elgg_view_layout('content', array(
 	'filter' => '',
 	'content' => $content,
 	'title' => $title,
+	'sidebar' => elgg_view('etherpad/sidebar', array('pad_guid' => $pad_guid))
 ));
 
 echo elgg_view_page($title, $body);

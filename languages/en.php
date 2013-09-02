@@ -23,6 +23,10 @@ $english = array(
 	'etherpad:group' => 'Group pads',
 	'groups:enablepads' => 'Enable group pads',
 	'etherpad:toggle_comment' => "Show/hide comments",
+	'etherpad:infos' => "Informations",
+	'etherpad:lastedited' => "Edited %s",
+	'etherpad:revisions' => "%s revisions",
+	'etherpad:contributors' => "Contributors of this pad :",
 
 
 	/**
