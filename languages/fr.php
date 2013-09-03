@@ -27,6 +27,8 @@ $french = array(
 	'etherpad:lastedited' => "Dernière édition %s",
 	'etherpad:revisions' => "%s révisions",
 	'etherpad:contributors' => "Ont contribué à ce pad :",
+	'etherpad:convert:markdown_wiki' => "Convertir ce pad en page wiki",
+	'etherpad:convert:markdown_blog' => "Convertir ce pad en article de blog",
 
 	/**
 	 * River

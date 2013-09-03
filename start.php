@@ -16,6 +16,8 @@ function etherpad_init() {
 	$actions_base = elgg_get_plugins_path() . 'elgg-ggouv_pad/actions/etherpad';
 	elgg_register_action("etherpad/save", "$actions_base/save.php");
 	elgg_register_action("etherpad/delete", "$actions_base/delete.php");
+	elgg_register_action("etherpad/convert-markdown_wiki", "$actions_base/convertToMarkdown_wiki.php");
+	elgg_register_action("etherpad/convert-markdown_blog", "$actions_base/convertToMarkdown_blog.php");
 
 	elgg_register_page_handler('etherpad', 'etherpad_page_handler');
 

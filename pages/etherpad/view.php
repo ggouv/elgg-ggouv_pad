@@ -31,11 +31,27 @@ if ($pad->getSubtype() == 'etherpad' && elgg_get_plugin_setting('show_comments',
 
 	elgg_register_menu_item('page', array(
 		'name' => 'toggle-comment',
+		'section' => 'A',
 		'href' => '#',
 		'text' => elgg_echo('etherpad:toggle_comment'),
 	));
 }
- 
+
+if (elgg_instanceof($container, 'group')) {
+	elgg_register_menu_item('page', array(
+		'name' => 'convert-markdown_wiki',
+		'section' => 'convert',
+		'href' => elgg_add_action_tokens_to_url("/action/etherpad/convert-markdown_wiki?guid={$pad_guid}"),
+		'text' => elgg_echo('etherpad:convert:markdown_wiki')
+	));
+}
+elgg_register_menu_item('page', array(
+	'name' => 'dconvert-markdown_blog',
+	'section' => 'convert',
+	'href' => elgg_add_action_tokens_to_url("/action/etherpad/convert-markdown_blog?guid={$pad_guid}"),
+	'text' => elgg_echo('etherpad:convert:markdown_blog')
+));
+
 $body = elgg_view_layout('content', array(
 	'filter' => '',
 	'content' => $content,

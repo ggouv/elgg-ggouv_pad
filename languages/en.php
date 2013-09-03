@@ -27,6 +27,8 @@ $english = array(
 	'etherpad:lastedited' => "Edited %s",
 	'etherpad:revisions' => "%s revisions",
 	'etherpad:contributors' => "Contributors of this pad :",
+	'etherpad:convert:markdown_wiki' => "Convert this pad to wiki page",
+	'etherpad:convert:markdown_blog' => "Convert this pad to blog article",
 
 
 	/**
