@@ -17,7 +17,7 @@ function etherpad_init() {
 	elgg_register_action("etherpad/save", "$actions_base/save.php");
 	elgg_register_action("etherpad/delete", "$actions_base/delete.php");
 
-	elgg_register_page_handler('pad', 'etherpad_page_handler');
+	elgg_register_page_handler('etherpad', 'etherpad_page_handler');
 
 	// Extend view
 	elgg_extend_view('css/elgg', 'etherpad/css');
@@ -192,7 +192,7 @@ function etherpad_notify_message($hook, $entity_type, $returnvalue, $params) {
  */
 function etherpad_url($entity) {
 	$title = elgg_get_friendly_title($entity->title);
-	return "pad/view/$entity->guid/$title";
+	return "etherpad/view/$entity->guid/$title";
 }
 
 /**
@@ -200,12 +200,12 @@ function etherpad_url($entity) {
  */
 function etherpad_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'user')) {
-		$url = "pad/owner/{$params['entity']->username}";
+		$url = "etherpad/owner/{$params['entity']->username}";
 		$item = new ElggMenuItem('etherpad', elgg_echo('etherpad'), $url);
 		$return[] = $item;
 	} else {
 		if ($params['entity']->etherpad_enable != "no") {
-			$url = "pad/group/{$params['entity']->guid}/all";
+			$url = "etherpad/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('etherpad', elgg_echo('etherpad:group'), $url);
 			$return[] = $item;
 		}

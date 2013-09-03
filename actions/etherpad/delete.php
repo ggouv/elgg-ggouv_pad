@@ -17,9 +17,9 @@ if ($page) {
 			system_message(elgg_echo('etherpad:delete:success'));
 
 			if (elgg_instanceof($container, 'group')) {
-				forward("pad/group/$container->guid/all");
+				forward("etherpad/group/$container->guid/all");
 			} else {
-				forward("pad/owner/$container->username");
+				forward("etherpad/owner/$container->username");
 			}
 
 		}

@@ -18,9 +18,9 @@ $container = elgg_get_page_owner_entity();
 $title = $pad->title;
 
 if (elgg_instanceof($container, 'group')) {
-	elgg_push_breadcrumb($container->name, "pad/group/{$container->guid}/all");
+	elgg_push_breadcrumb($container->name, "etherpad/group/{$container->guid}/all");
 } else {
-	elgg_push_breadcrumb($container->name, "pad/owner/$container->username");
+	elgg_push_breadcrumb($container->name, "etherpad/owner/$container->username");
 }
 elgg_push_breadcrumb($title);
 

@@ -7,7 +7,7 @@
 
 $owner = elgg_get_page_owner_entity();
 if (!$owner) {
-	forward('pad/all');
+	forward('etherpad/all');
 }
 
 // access check for closed groups
