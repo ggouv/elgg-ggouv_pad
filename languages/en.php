@@ -15,10 +15,12 @@ $english = array(
 	'etherpad:owner' => "%s's pads",
 	'etherpad:friends' => "Friends' pads",
 	'etherpad:all' => "All site pads",
-	'pad:add' => "Add pad",
+	'etherpad:add' => "Add pad",
 	'etherpad:timeslider' => 'History',
 	'etherpad:fullscreen' => 'Fullscreen',
 	'etherpad:none' => 'No pads created yet',
+	'etherpad:status:closed' => "Closed",
+	'etherpad:infos:closed' => "&nbsp; %s by %s",
 
 	'etherpad:group' => 'Group pads',
 	'groups:enablepads' => 'Enable group pads',
@@ -29,6 +31,7 @@ $english = array(
 	'etherpad:contributors' => "Contributors of this pad :",
 	'etherpad:convert:markdown_wiki' => "Convert this pad to wiki page",
 	'etherpad:convert:markdown_blog' => "Convert this pad to blog article",
+	'etherpad:create:info' => "Pads are not permanant, don't use it like a definitive article.",
 
 
 	/**
@@ -72,6 +75,7 @@ $english = array(
 	'etherpad:showcomments' => "Show comments?",
 	'etherpad:newpadtext' => "New pad text:",
 	'etherpad:pad:message' => 'New pad created successfully.',
+	'etherpad:cron:mail:subject' => 'Errors with cron etherpad',
 
 	/**
 	 * Widget

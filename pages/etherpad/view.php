@@ -29,15 +29,17 @@ $content = elgg_view_entity($pad, array('full_view' => true));
 if ($pad->getSubtype() == 'etherpad' && elgg_get_plugin_setting('show_comments', 'elgg-ggouv_pad') == 'yes') {
 	$content .= elgg_view_comments($pad, true);
 
-	elgg_register_menu_item('page', array(
-		'name' => 'toggle-comment',
-		'section' => 'A',
-		'href' => '#',
-		'text' => elgg_echo('etherpad:toggle_comment'),
-	));
+	if ($pad->getPrivateSetting('status') == 'open') {
+		elgg_register_menu_item('page', array(
+			'name' => 'toggle-comment',
+			'section' => 'A',
+			'href' => '#',
+			'text' => elgg_echo('etherpad:toggle_comment'),
+		));
+	}
 }
 
-if (elgg_instanceof($container, 'group')) {
+if (elgg_instanceof($container, 'group') && $group->markdown_wiki_enable != 'no') {
 	elgg_register_menu_item('page', array(
 		'name' => 'convert-markdown_wiki',
 		'section' => 'convert',

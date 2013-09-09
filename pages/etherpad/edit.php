@@ -28,8 +28,12 @@ elgg_push_breadcrumb(elgg_echo('edit'));
 $title = elgg_echo("pages:edit");
 
 if ($page->canEdit()) {
+	$content = elgg_view('output/longtext', array(
+		'value' => elgg_echo('etherpad:create:info'),
+		'class' => 'pbm'
+	));
 	$vars = etherpad_prepare_form_vars($page);
-	$content = elgg_view_form('etherpad/save', array(), $vars);
+	$content .= elgg_view_form('etherpad/save', array(), $vars);
 } else {
 	$content = elgg_echo("pages:noaccess");
 }

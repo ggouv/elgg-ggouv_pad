@@ -53,11 +53,14 @@ function etherpad_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'etherpad_owner_block_menu');
 
 	// add to groups
-	add_group_tool_option('etherpad', elgg_echo('groups:enablepads'), true);
+	add_group_tool_option('etherpad', elgg_echo('groups:enablepads'), false);
 	elgg_extend_view('groups/tool_latest', 'etherpad/group_module');
 
 	// Register a URL handler for bookmarks
 	elgg_register_entity_url_handler('object', 'etherpad', 'etherpad_url');
+
+	// Register cron to delete etherpad
+	elgg_register_plugin_hook_handler('cron', 'daily', 'delete_etherpad_cron');
 
 }
 
@@ -70,7 +73,7 @@ function etherpad_page_handler($page, $handler) {
 		$page[0] = 'all';
 	}
 
-	elgg_push_breadcrumb(elgg_echo('etherpad'), "pad/all");
+	elgg_push_breadcrumb(elgg_echo('etherpad'), "etherpad/all");
 
 	$base_dir = elgg_get_plugins_path() . "elgg-ggouv_pad/pages/etherpad";
 
@@ -206,7 +209,7 @@ function etherpad_owner_block_menu($hook, $type, $return, $params) {
 		$item = new ElggMenuItem('etherpad', elgg_echo('etherpad'), $url);
 		$return[] = $item;
 	} else {
-		if ($params['entity']->etherpad_enable != "no") {
+		if ($params['entity']->etherpad_enable == "yes") {
 			$url = "etherpad/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('etherpad', elgg_echo('etherpad:group'), $url);
 			$return[] = $item;
@@ -273,3 +276,49 @@ function etherpad_container_permission_check($hook, $entity_type, $returnvalue, 
 	}
 
 }
+
+
+function delete_etherpad_cron($hook, $entity_type, $returnvalue, $params) {
+	$errors = array();
+	$one_month = 60*60*24 * 30;
+
+	$options = array(
+		'types' => 'object',
+		'subtype' => 'etherpad',
+		'private_setting_name_value_pairs' => array('status' => 'open'),
+		'created_time_upper' => time() - $one_month*3,
+		'limit' => 0
+	);
+
+	$batch = new ElggBatch('elgg_get_entities_from_private_settings', $options);
+
+	foreach ($batch as $pad) {
+		try {
+			$pad = new ElggPad($pad->guid);
+			$lastEdited = $pad->getLastEdited()/1000;
+
+			if ( $lastEdited < (time() - $one_month) ) {
+				$pad->closePad();
+			}
+		} catch (Exception $e){
+			$errors[$pad->getGUID()] = $e;
+		}
+		unset($pad);
+	}
+
+
+
+	// send email if error
+	if (false && !empty($errors)) {
+		$body = '';
+		foreach($errors as $key => $error) {
+			$body .= '<strong>' . $key . '</strong><br>';
+			$body .= $error . '<br><br>';
+		}
+
+		// send mail to site email
+		$mail = elgg_get_config('siteemail');
+		elgg_send_email($mail, $mail, elgg_echo('etherpad:cron:mail:subject'), $body);
+	}
+}
+

@@ -15,10 +15,12 @@ $french = array(
 	'etherpad:owner' => "Pads de %s",
 	'etherpad:friends' => "Pads de vos abonnements",
 	'etherpad:all' => "Tous les pads du site",
-	'pad:add' => "Créer un pad",
+	'etherpad:add' => "Créer un pad",
 	'etherpad:timeslider' => 'Historique',
 	'etherpad:fullscreen' => 'Plein écran',
 	'etherpad:none' => "Aucun pad n'a été créé pour l'instant.",
+	'etherpad:status:closed' => "Fermé",
+	'etherpad:infos:closed' => "&nbsp; %s par %s",
 
 	'etherpad:group' => 'Pads du groupe',
 	'groups:enablepads' => 'Activer les pads pour le groupe',
@@ -29,6 +31,11 @@ $french = array(
 	'etherpad:contributors' => "Ont contribué à ce pad :",
 	'etherpad:convert:markdown_wiki' => "Convertir ce pad en page wiki",
 	'etherpad:convert:markdown_blog' => "Convertir ce pad en article de blog",
+	'etherpad:create:info' => "{5a **Les pads sont temporaires :**
+Les pads sont des **brouillons collaboratifs**, ils ne doivent pas être utilisés comme article définitif.
+
+Au bout de trois mois, si le pad n'a pas été utilisé depuis plus d'un mois, il est converti en texte. Tout l'historique des modifications est supprimé.
+}",
 
 	/**
 	 * River
@@ -71,6 +78,7 @@ $french = array(
 	'etherpad:showcomments' => "Afficher les commentaires ?",
 	'etherpad:newpadtext' => "Text dans un nouveau pad :",
 	'etherpad:pad:message' => 'Le nouveau pad a été créé.',
+	'etherpad:cron:mail:subject' => 'Erreurs lors du cron etherpad',
 
 	/**
 	 * Widget

@@ -20,12 +20,18 @@ foreach ($variables as $name => $type) {
 // Get guids
 $page_guid = (int)get_input('page_guid');
 $container_guid = (int)get_input('container_guid');
-$parent_guid = (int)get_input('parent_guid');
+
+$container = get_entity($container_guid);
 
 elgg_make_sticky_form('etherpad');
 
 if (!$input['title']) {
 	register_error(elgg_echo('pages:error:no_title'));
+	forward(REFERER);
+}
+
+if (!$container->canWriteToContainer()) {
+	register_error(elgg_echo('pages:error:no_save'));
 	forward(REFERER);
 }
 
@@ -38,10 +44,9 @@ if ($page_guid) {
 	$new_page = false;
 } else {
 	$page = new ElggPad();
-	if ($parent_guid) {
-		$page->subtype = 'subpad';
-	}
 	$new_page = true;
+	$page->container_guid = $container_guid;
+	set_private_setting($page->guid, 'status', 'open');
 }
 
 if (sizeof($input) > 0) {
@@ -50,19 +55,9 @@ if (sizeof($input) > 0) {
 	}
 }
 
-// need to add check to make sure user can write to container
-$page->container_guid = $container_guid;
-
-if ($parent_guid) {
-	$page->parent_guid = $parent_guid;
-}
-
 if ($page->save()) {
 
 	elgg_clear_sticky_form('etherpad');
-
-	// Now save description as an annotation
-	//$page->annotate('page', $page->description, $page->access_id);
 
 	system_message(elgg_echo('etherpad:saved'));
 

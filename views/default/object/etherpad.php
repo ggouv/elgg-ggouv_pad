@@ -25,7 +25,7 @@ if ($etherpad->write_access_id == ACCESS_PUBLIC) {
 	$etherpad->write_access_id = ACCESS_LOGGED_IN;
 }
 
-//link to owners pages only if pages integration is enabled. Else link to owners pads. 
+//link to owners pages only if pages integration is enabled. Else link to owners pads.
 $editor = get_entity($etherpad->owner_guid);
 $editor_link = elgg_view('output/url', array(
 	'href' => "pad/owner/$editor->username",
@@ -66,16 +66,33 @@ if (elgg_in_context('widgets')) {
 }
 
 if ($full) {
-	try {
-		$body .= elgg_view('output/iframe', array(
-			'value' => $etherpad->getPadPath($timeslider),
-			'class' => 'etherpad mtm',
-			'width' => '100%',
-			'height' => '400px',
-			'frameborder' => '0'
+	if ($etherpad->getPrivateSetting('status') == 'open') {
+		try {
+			$body = elgg_view('output/iframe', array(
+				'value' => $etherpad->getPadPath($timeslider),
+				'class' => 'etherpad mtm',
+				'width' => '100%',
+				'height' => '400px',
+				'frameborder' => '0'
+			));
+		} catch(Exception $e) {
+			$body = elgg_echo('etherpad:'. $e->getMessage());
+		}
+	} else {
+		$md = elgg_get_metadata(array(
+			'guid' => $etherpad->getGUID(),
+			'metadata_name' => 'text',
+			'limit' => 0,
 		));
-	} catch(Exception $e) {
-		$body .= elgg_echo('etherpad:'. $e->getMessage());
+		$status = '<span class="status declined">' . elgg_echo('etherpad:status:closed') . '</span>';
+		$time = elgg_get_friendly_time($md[0]->time_created);
+		$owner = get_entity($md[0]->owner_guid);
+		$owner_text = elgg_view('output/url', array(
+			'text' => $owner->username,
+			'href' => $owner->getURL()
+		));
+		$body = '<div class="elgg-heading-basic pam mbl">' . $status . elgg_echo('etherpad:infos:closed', array($time, $owner_text)) . '</div>';
+		$body .= $etherpad->text;
 	}
 	$params = array(
 		'entity' => $etherpad,
@@ -98,10 +115,14 @@ if ($full) {
 
 	$excerpt = elgg_get_excerpt($etherpad->description);
 
+	if ($etherpad->getPrivateSetting('status') != 'open') {
+		$status = '<span class="status declined mlm">' . elgg_echo('etherpad:status:closed') . '</span>';
+	}
+
 	$params = array(
 		'entity' => $etherpad,
 		'metadata' => $metadata,
-		'subtitle' => $subtitle,
+		'subtitle' => $subtitle . $status,
 		'tags' => $tags,
 		'content' => $excerpt,
 	);

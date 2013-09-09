@@ -64,6 +64,20 @@ class ElggPad extends ElggObject {
 		return parent::delete();
 	}
 
+	function closePad(){
+		try {
+			$this->startSession();
+			$text = $this->getPadHTML();
+			$this->get_pad_client()->deletePad($this->getMetaData('pname'));
+		} catch(Exception $e) {
+			return false;
+		}
+		set_private_setting($this->getGUID(), 'status', 'closed');
+		$this->deleteMetadata('pname');
+		$this->text = $text;
+		return true;
+	}
+
 	protected function get_pad_client(){
 		if($this->pad){
 			return $this->pad;
