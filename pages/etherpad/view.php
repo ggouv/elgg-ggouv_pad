@@ -54,6 +54,16 @@ elgg_register_menu_item('page', array(
 	'text' => elgg_echo('etherpad:convert:markdown_blog')
 ));
 
+if ($pad->canEdit()) {
+	elgg_register_menu_item('page', array(
+		'name' => 'eclose',
+		'section' => 'convert',
+		'href' => elgg_add_action_tokens_to_url("/action/etherpad/close?guid={$pad_guid}"),
+		'confirm' => elgg_echo('etherpad:close:confirm'),
+		'text' => elgg_echo('etherpad:close')
+	));
+}
+
 $body = elgg_view_layout('content', array(
 	'filter' => '',
 	'content' => $content,

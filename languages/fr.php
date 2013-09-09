@@ -31,6 +31,8 @@ $french = array(
 	'etherpad:contributors' => "Ont contribué à ce pad :",
 	'etherpad:convert:markdown_wiki' => "Convertir ce pad en page wiki",
 	'etherpad:convert:markdown_blog' => "Convertir ce pad en article de blog",
+	'etherpad:close' => "Fermer ce pad",
+	'etherpad:close:confirm' => "Voulez-vous vraiment fermer ce pad ? Il ne sera plus possible de l'éditer et l'historique sera supprimé. Le texte, les auteurs et le nombre de révisions seront conservés.",
 	'etherpad:create:info' => "{5a **Les pads sont temporaires :**
 Les pads sont des **brouillons collaboratifs**, ils ne doivent pas être utilisés comme article définitif.
 
@@ -54,6 +56,8 @@ Au bout de trois mois, si le pad n'a pas été utilisé depuis plus d'un mois, i
 	'etherpad:delete:success' => "Le pad a été supprimé.",
 	'etherpad:delete:failure' => "Le pad ne peux pas être supprimé.",
 	'etherpad:Empty or No Response from the server' => "Le serveur de pads semble être à l'arrêt. Contactez un membre du groupe !dev pour plus d'informations...",
+	'etherpad:close:success' => "Le pad a été fermé.",
+	'etherpad:close:failure' => "Le pad ne peux pas être fermé.",
 
 	/**
 	 * Edit page

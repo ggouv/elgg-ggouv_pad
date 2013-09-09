@@ -31,6 +31,8 @@ $english = array(
 	'etherpad:contributors' => "Contributors of this pad :",
 	'etherpad:convert:markdown_wiki' => "Convert this pad to wiki page",
 	'etherpad:convert:markdown_blog' => "Convert this pad to blog article",
+	'etherpad:close' => "Close this pad",
+	'etherpad:close:confirm' => "Voulez-vous vraiment fermer ce pad ? Il ne sera plus possible de l'éditer et l'historique sera supprimé. Le texte, les auteurs et le nombre de révisions seront conservés.",
 	'etherpad:create:info' => "Pads are not permanant, don't use it like a definitive article.",
 
 
@@ -51,6 +53,8 @@ $english = array(
 	'etherpad:delete:success' => "Your pad was successfully deleted.",
 	'etherpad:delete:failure' => "Your pad could not be deleted. Please try again.",
 	'etherpad:Empty or No Response from the server' => "Empty or No Response from the server",
+	'etherpad:close:success' => "Your pad was successfully closed.",
+	'etherpad:close:failure' => "Your pad could not be closed. Please try again.",
 
 	/**
 	 * Edit page

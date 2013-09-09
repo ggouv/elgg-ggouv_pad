@@ -18,6 +18,7 @@ function etherpad_init() {
 	elgg_register_action("etherpad/delete", "$actions_base/delete.php");
 	elgg_register_action("etherpad/convert-markdown_wiki", "$actions_base/convertToMarkdown_wiki.php");
 	elgg_register_action("etherpad/convert-markdown_blog", "$actions_base/convertToMarkdown_blog.php");
+	elgg_register_action("etherpad/close", "$actions_base/close.php");
 
 	elgg_register_page_handler('etherpad', 'etherpad_page_handler');
 
