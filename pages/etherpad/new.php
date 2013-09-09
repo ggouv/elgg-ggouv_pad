@@ -7,7 +7,7 @@
 
 gatekeeper();
 
-$title = elgg_echo('pad:add');
+$title = elgg_echo('etherpad:add');
 elgg_push_breadcrumb($title);
 
 $content = elgg_view('output/longtext', array(

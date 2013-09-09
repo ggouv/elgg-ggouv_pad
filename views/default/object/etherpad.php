@@ -84,14 +84,19 @@ if ($full) {
 			'metadata_name' => 'text',
 			'limit' => 0,
 		));
+
 		$status = '<span class="status declined">' . elgg_echo('etherpad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
 		$owner = get_entity($md[0]->owner_guid);
-		$owner_text = elgg_view('output/url', array(
-			'text' => $owner->username,
-			'href' => $owner->getURL()
-		));
-		$body = '<div class="elgg-heading-basic pam mbl">' . $status . elgg_echo('etherpad:infos:closed', array($time, $owner_text)) . '</div>';
+		if ($owner) { // pad closed by someone
+			$owner_text = elgg_view('output/url', array(
+				'text' => $owner->username,
+				'href' => $owner->getURL()
+			));
+		} else { // pad closed by cron
+			$owner_text = elgg_get_site_entity()->name;
+		}
+		$body = '<div class="elgg-heading-basic pam mvm">' . $status . elgg_echo('etherpad:infos:closed', array($time, $owner_text)) . '</div>';
 		$body .= $etherpad->text;
 	}
 	$params = array(

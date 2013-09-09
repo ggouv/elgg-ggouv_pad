@@ -46,7 +46,6 @@ if ($page_guid) {
 	$page = new ElggPad();
 	$new_page = true;
 	$page->container_guid = $container_guid;
-	set_private_setting($page->guid, 'status', 'open');
 }
 
 if (sizeof($input) > 0) {
@@ -62,7 +61,8 @@ if ($page->save()) {
 	system_message(elgg_echo('etherpad:saved'));
 
 	if ($new_page) {
-		add_to_river('river/object/etherpad/create', 'create', elgg_get_logged_in_user_guid(), $page->guid);
+		set_private_setting($page->getGUID(), 'status', 'open');
+		add_to_river('river/object/etherpad/create', 'create', elgg_get_logged_in_user_guid(), $page->getGUID());
 	}
 
 	forward($page->getURL());

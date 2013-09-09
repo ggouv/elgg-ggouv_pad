@@ -55,16 +55,25 @@ class ElggPad extends ElggObject {
 	}
 
 	function delete(){
-		try {
-			$this->startSession();
-			$this->get_pad_client()->deletePad($this->getMetaData('pname'));
-		} catch(Exception $e) {
-			return false;
+		if ($this->getPrivateSetting('status') == 'open') {
+			try {
+				$this->startSession();
+				$this->get_pad_client()->deletePad($this->getMetaData('pname'));
+			} catch(Exception $e) {
+				return false;
+			}
 		}
 		return parent::delete();
 	}
 
 	function closePad(){
+		$authors = $this->listAuthorsNamesOfPad();
+		$authors = array_unique($authors);
+
+		$revisions = $this->getRevisionsCount();
+		$lastedit = round($this->getLastEdited()/1000);
+
+		// delete pad on etherpad database
 		try {
 			$this->startSession();
 			$text = $this->getPadHTML();
@@ -72,9 +81,22 @@ class ElggPad extends ElggObject {
 		} catch(Exception $e) {
 			return false;
 		}
+
 		set_private_setting($this->getGUID(), 'status', 'closed');
+
+		$authors_guid = array();
+		foreach($authors as $author) {
+			$user = get_user_by_username($author);
+			add_entity_relationship($user->getGUID(), 'contributed_to', $this->getGUID());
+		}
+
+		$ia = elgg_set_ignore_access(true);
 		$this->deleteMetadata('pname');
-		$this->text = $text;
+		elgg_set_ignore_access($ia);
+
+		create_metadata($this->getGUID(), 'text', $text, 'text');
+		create_metadata($this->getGUID(), 'infos', serialize(array($lastedit, $revisions)), 'text');
+
 		return true;
 	}
 

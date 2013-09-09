@@ -280,13 +280,14 @@ function etherpad_container_permission_check($hook, $entity_type, $returnvalue, 
 
 function delete_etherpad_cron($hook, $entity_type, $returnvalue, $params) {
 	$errors = array();
+	$time = time();
 	$one_month = 60*60*24 * 30;
 
 	$options = array(
 		'types' => 'object',
 		'subtype' => 'etherpad',
 		'private_setting_name_value_pairs' => array('status' => 'open'),
-		'created_time_upper' => time() - $one_month*3,
+		'created_time_upper' => $time - $one_month*3,
 		'limit' => 0
 	);
 
@@ -297,7 +298,7 @@ function delete_etherpad_cron($hook, $entity_type, $returnvalue, $params) {
 			$pad = new ElggPad($pad->guid);
 			$lastEdited = $pad->getLastEdited()/1000;
 
-			if ( $lastEdited < (time() - $one_month) ) {
+			if ( $lastEdited < ($time - $one_month) ) {
 				$pad->closePad();
 			}
 		} catch (Exception $e){
@@ -309,7 +310,7 @@ function delete_etherpad_cron($hook, $entity_type, $returnvalue, $params) {
 
 
 	// send email if error
-	if (false && !empty($errors)) {
+	if (!empty($errors)) {
 		$body = '';
 		foreach($errors as $key => $error) {
 			$body .= '<strong>' . $key . '</strong><br>';
