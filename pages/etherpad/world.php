@@ -15,6 +15,7 @@ elgg_register_title_button();
 $content = elgg_list_entities(array(
 	'types' => 'object',
 	'subtypes' => 'etherpad',
+	'show_group' => true,
 	'full_view' => false,
 ));
 if (!$content) {
@@ -25,7 +26,7 @@ $body = elgg_view_layout('content', array(
 	'filter_context' => 'all',
 	'content' => $content,
 	'title' => $title,
-	//'sidebar' => elgg_view('etherpad/sidebar'),
+	'sidebar' => elgg_view('etherpad/sidebar'),
 ));
 
 echo elgg_view_page($title, $body);

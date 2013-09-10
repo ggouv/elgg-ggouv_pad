@@ -38,7 +38,7 @@ $params = array(
 	'filter_context' => $filter_context,
 	'content' => $content,
 	'title' => $title,
-	//'sidebar' => elgg_view('etherpad/sidebar'),
+	'sidebar' => elgg_view('etherpad/sidebar'),
 );
 
 if (elgg_instanceof($owner, 'group')) {

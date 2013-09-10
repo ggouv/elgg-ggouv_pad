@@ -7,7 +7,7 @@
 
 $pad_guid = elgg_extract('pad_guid', $vars, FALSE);
 
-if ($pad_guid) {
+if ($pad_guid) { // pad view
 
 	$etherpad = get_entity($pad_guid);
 
@@ -72,4 +72,23 @@ if ($pad_guid) {
 		}
 		echo elgg_view_module('aside', $title, $body);
 	}
+
+} else {
+
+	if ($container_guid = elgg_get_page_owner_guid()) { // group view
+		$params = array(
+			'subtype' => 'etherpad',
+			'container_guid' => elgg_get_page_owner_guid()
+		);
+	} else { // all view
+		$params = array(
+			'subtype' => 'etherpad'
+		);
+	}
+
+	echo elgg_view('page/elements/comments_block', $params);
+
+	echo elgg_view('page/elements/tagcloud_block', $params);
+
 }
+

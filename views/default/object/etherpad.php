@@ -12,12 +12,14 @@
 $full = elgg_extract('full_view', $vars, FALSE);
 $etherpad = elgg_extract('entity', $vars, FALSE);
 $timeslider = elgg_extract('timeslider', $vars, FALSE);
+$show_group = elgg_extract('show_group', $vars, FALSE);
 
 if (!$etherpad || !elgg_instanceof($etherpad, 'object', 'etherpad')) {
 	return TRUE;
 }
 
 $etherpad = new ElggPad($etherpad->guid);
+$container = $etherpad->getContainerEntity();
 
 // pages used to use Public for write access
 if ($etherpad->write_access_id == ACCESS_PUBLIC) {
@@ -51,6 +53,17 @@ if ($comments_count != 0) {
 	$comments_link = '';
 }
 
+if ($show_group && elgg_instanceof($container, 'group')) {
+	$group_link = elgg_view('output/url', array(
+		'href' => $container->getURL(),
+		'text' => $container->name,
+		'is_trusted' => true,
+	));
+	$group_text = elgg_echo('groups:ingroup') . ' ' . $group_link;
+} else {
+	$group_text = '';
+}
+
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $etherpad,
 	'handler' => 'etherpad',
@@ -58,7 +71,7 @@ $metadata = elgg_view_menu('entity', array(
 	'class' => 'elgg-menu-entity elgg-menu-hz',
 ));
 
-$subtitle = "$editor_text $date $comments_link $categories";
+$subtitle = "$editor_text $group_text $date $comments_link $categories";
 
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) {
