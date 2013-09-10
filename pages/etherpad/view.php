@@ -54,7 +54,7 @@ elgg_register_menu_item('page', array(
 	'text' => elgg_echo('etherpad:convert:markdown_blog')
 ));
 
-if ($pad->canEdit()) {
+if ($pad->canEdit() && $pad->getPrivateSetting('status') == 'open') {
 	elgg_register_menu_item('page', array(
 		'name' => 'eclose',
 		'section' => 'convert',
