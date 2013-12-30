@@ -188,9 +188,11 @@ class ElggPad extends ElggObject {
 
 		$this->startSession();
 
-		if($this->canEdit() && !$timeslider) {
+		$container = $this->getContainerEntity();
+
+		if($container->canWriteToContainer() && !$timeslider) {
 			return $this->getAddress() . $options;
-		} elseif ($this->canEdit() && $timeslider) {
+		} elseif ($container->canWriteToContainer() && $timeslider) {
 			return $this->getTimesliderAddress() . $options;
 		} else {
 			return $this->getReadOnlyAddress() . $options;

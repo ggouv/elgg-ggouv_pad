@@ -25,6 +25,7 @@ $english = array(
 	'etherpad:group' => 'Group pads',
 	'groups:enablepads' => 'Enable group pads',
 	'etherpad:toggle_comment' => "Show/hide comments",
+	'etherpad:toggle_markdown-preview' => "Show/hide preview",
 	'etherpad:infos' => "Informations",
 	'etherpad:lastedited' => "Edited %s",
 	'etherpad:revisions' => "%s revisions",

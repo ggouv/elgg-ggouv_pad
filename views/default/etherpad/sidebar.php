@@ -22,8 +22,8 @@ if ($pad_guid) { // pad view
 				'time' => $etherpad->getLastEdited()/1000
 			));
 			$body = elgg_echo('etherpad:lastedited', array($lastedit));
-			$body .= '<br/>' . elgg_echo('etherpad:revisions', array($etherpad->getRevisionsCount()));
-			echo elgg_view_module('aside', $title, $body);
+			$body .= '<br/>' . elgg_echo('etherpad:revisions', array('<span id="pad-revisions-count">' . $etherpad->getRevisionsCount() . '</span>'));
+			echo elgg_view_module('aside', $title, $body, array('id' => 'pad-infos'));
 
 			// contributors
 			$title = elgg_echo('etherpad:contributors');
@@ -36,6 +36,7 @@ if ($pad_guid) { // pad view
 				$body .= elgg_view_entity_icon($user, 'small');
 			}
 			echo elgg_view_module('aside', $title, $body);
+
 		} catch (Exception $e){
 			return false;
 		}

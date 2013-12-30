@@ -81,13 +81,38 @@ if (elgg_in_context('widgets')) {
 if ($full) {
 	if ($etherpad->getPrivateSetting('status') == 'open') {
 		try {
-			$body = elgg_view('output/iframe', array(
-				'value' => $etherpad->getPadPath($timeslider),
-				'class' => 'etherpad mtm',
+
+			$body = '<div class="pad-wrapper pts float">';
+			$body .= elgg_view('output/iframe', array(
+				'value' => $etherpad->getPadPath(),
+				'class' => 'etherpad float',
 				'width' => '100%',
 				'height' => '400px',
 				'frameborder' => '0'
 			));
+
+			$tabs['preview'] = array(
+				'text' => elgg_echo('markdown_wiki:preview'),
+				'href' => "#",
+				'selected' => true,
+				'priority' => 200,
+			);
+			$tabs['help'] = array(
+				'text' => elgg_echo('markdown_wiki:syntax'),
+				'href' => "#",
+				'priority' => 300,
+			);
+
+			foreach ($tabs as $name => $tab) {
+				$tab['name'] = $name;
+				elgg_register_menu_item('markdown', $tab);
+			}
+
+			$body .= elgg_view_menu('markdown', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz markdown-menu prs t25 hidden'));
+			$body .= '<div class="pane-markdown hidden"><div id="md-preview-pad" class="pane preview-markdown markdown-body mlm pas"></div><div class="pane help-markdown hidden mlm pas"></div></div>';
+			$body .= '</div>';
+
+
 		} catch(Exception $e) {
 			$body = elgg_echo('etherpad:'. $e->getMessage());
 		}

@@ -4,7 +4,7 @@
 	<author>Emmanuel Salomon</author>
 	<version>0.1</version>
 	<category>integrations</category>
-	<category>widget</category>
+	<category>ggouv</category>
 	<blurb>Etherpad Lite integration.</blurb>
 	<description>Adds Etherpad Lite support to elgg 1.8. Forked from etherpad plugin of Lorea</description>
 	<website>http://ggouv.fr</website>

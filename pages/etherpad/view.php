@@ -39,6 +39,14 @@ if ($pad->getSubtype() == 'etherpad' && elgg_get_plugin_setting('show_comments',
 	}
 }
 
+elgg_register_menu_item('page', array(
+	'name' => 'toggle-markdown-preview',
+	'section' => 'A',
+	'href' => '#',
+	'text' => elgg_echo('etherpad:toggle_markdown-preview'),
+	'item_class' => 'hidden'
+));
+
 if (elgg_instanceof($container, 'group') && $group->markdown_wiki_enable != 'no') {
 	elgg_register_menu_item('page', array(
 		'name' => 'convert-markdown_wiki',

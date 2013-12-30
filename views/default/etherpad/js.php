@@ -24,8 +24,10 @@ elgg.ggouv_pad.init = function() {
 
 	// for extensible template
 	$(window).bind('resize.pad', function() {
-		if ($('iframe.etherpad').length ) {
-			$('iframe.etherpad').height($(window).height() - $('iframe.etherpad').position().top - 58);
+		var $ie = $('iframe.etherpad');
+
+		if ($ie.length ) {
+			$ie.add('#md-preview-pad').height($(window).height() - $ie.position().top - 48);
 		}
 	});
 };
@@ -39,22 +41,57 @@ elgg.register_hook_handler('init', 'system', elgg.ggouv_pad.init);
  */
 elgg.ggouv_pad.reload = function() {
 	if ($('iframe.etherpad').length) {
-		$('body').addClass('fixed-pad');
-		$('iframe.etherpad').height($(window).height() - $('iframe.etherpad').position().top - 58);
-		$('.elgg-comments').addClass('hidden');
+		var $b = $('body').addClass('fixed-pad'),
+			$ie = $('iframe.etherpad'),
+			$et = $('.elgg-content'),
+			$ec = $('.elgg-comments').addClass('hidden'),
+			$mp = $('.elgg-menu-item-toggle-markdown-preview').removeClass('hidden'),
+			$pm = $('.pad-wrapper .pane-markdown, .pad-wrapper .markdown-menu'),
+			Height = $(window).height() - $ie.position().top - 48;
+
+		$ie.height(Height);
+		$('#md-preview-pad, .pad-wrapper .help-markdown').height(Height-10);
 
 		$('.elgg-content .elgg-subtext a[href*="comments"], .elgg-menu-item-toggle-comment a').die().live('click', function() {
-			if ($('iframe.etherpad').hasClass('hidden')) {
-				$('body').addClass('fixed-pad');
-				$('iframe.etherpad').removeClass('hidden');
-				$('.elgg-comments').addClass('hidden');
+			if ($et.hasClass('hidden')) {
+				$b.addClass('fixed-pad');
+				$et.removeClass('hidden');
+				$ec.addClass('hidden');
 			} else {
-				$('body').removeClass('fixed-pad');
-				$('iframe.etherpad').addClass('hidden');
-				$('.elgg-comments').removeClass('hidden');
+				$b.removeClass('fixed-pad');
+				$et.addClass('hidden');
+				$ec.removeClass('hidden');
 			}
 			return false;
 		});
+
+		$('.elgg-menu-item-toggle-markdown-preview a').die().live('click', function() {
+			if ($pm.hasClass('hidden')) {
+
+				// ugly way to get pad text. @todo find another way. http://stackoverflow.com/questions/4039384/how-do-i-programatically-fetch-the-live-plaintext-contents-of-an-etherpad doesn't work padeditor is undefined.
+				if ($('#md-preview-pad').html() == '') {
+					console.log('ui');
+					var padHtml = $('.etherpad')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow.$('#innerdocbody').html();
+					$('#md-preview-pad').html(elgg.markdown_wiki.ShowdownConvert($('<div>').html(padHtml.replace(/<div id="magic/g, '\n<div id="magic')).text()));
+				}
+
+				$pm.removeClass('hidden');
+				$ie.css('width', '50%');
+			} else {
+				$pm.addClass('hidden');
+				$ie.css('width', '100%');
+			}
+			return false;
+		});
+
+		// menus
+		$('.pad-wrapper .elgg-menu-markdown li').click(function() {
+			$(this).parent().find('li').removeClass('elgg-state-selected');
+			var paneName = $(this).addClass('elgg-state-selected').attr('class').split(' ')[0].split('-').pop(-1);
+
+			$('.pane-markdown .pane').removeClass('hidden').not('.'+paneName+'-markdown').addClass('hidden');
+		});
+
 	} else {
 		$('body').removeClass('fixed-pad');
 	}

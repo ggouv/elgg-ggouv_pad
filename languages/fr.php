@@ -25,6 +25,7 @@ $french = array(
 	'etherpad:group' => 'Pads du groupe',
 	'groups:enablepads' => 'Activer les pads pour le groupe',
 	'etherpad:toggle_comment' => "Afficher/masquer les commentaires",
+	'etherpad:toggle_markdown-preview' => "Afficher/masquer la prévisualisation",
 	'etherpad:infos' => "Informations",
 	'etherpad:lastedited' => "Dernière édition %s",
 	'etherpad:revisions' => "%s révisions",
