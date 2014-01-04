@@ -10,42 +10,42 @@
 
 
 $full = elgg_extract('full_view', $vars, FALSE);
-$etherpad = elgg_extract('entity', $vars, FALSE);
+$pad = elgg_extract('entity', $vars, FALSE);
 $timeslider = elgg_extract('timeslider', $vars, FALSE);
 $show_group = elgg_extract('show_group', $vars, FALSE);
 
-if (!$etherpad || !elgg_instanceof($etherpad, 'object', 'etherpad')) {
+if (!$pad || !elgg_instanceof($pad, 'object', 'pad')) {
 	return TRUE;
 }
 
-$etherpad = new ElggPad($etherpad->guid);
-$container = $etherpad->getContainerEntity();
+$pad = new ElggPad($pad->guid);
+$container = $pad->getContainerEntity();
 
 // pages used to use Public for write access
-if ($etherpad->write_access_id == ACCESS_PUBLIC) {
+if ($pad->write_access_id == ACCESS_PUBLIC) {
 	// this works because this metadata is public
-	$etherpad->write_access_id = ACCESS_LOGGED_IN;
+	$pad->write_access_id = ACCESS_LOGGED_IN;
 }
 
 //link to owners pages only if pages integration is enabled. Else link to owners pads.
-$editor = get_entity($etherpad->owner_guid);
+$editor = get_entity($pad->owner_guid);
 $editor_link = elgg_view('output/url', array(
 	'href' => "pad/owner/$editor->username",
 	'text' => $editor->name,
 	'is_trusted' => true,
 ));
 
-$date = elgg_view_friendly_time($etherpad->time_created);
+$date = elgg_view_friendly_time($pad->time_created);
 $editor_text = elgg_echo('byline', array($editor_link));
-$tags = elgg_view('output/tags', array('tags' => $etherpad->tags));
+$tags = elgg_view('output/tags', array('tags' => $pad->tags));
 $categories = elgg_view('output/categories', $vars);
 
-$comments_count = $etherpad->countComments();
+$comments_count = $pad->countComments();
 //only display if there are commments
 if ($comments_count != 0) {
 	$text = elgg_echo("comments") . " ($comments_count)";
 	$comments_link = elgg_view('output/url', array(
-		'href' => $etherpad->getURL() . '#comments',
+		'href' => $pad->getURL() . '#comments',
 		'text' => $text,
 		'is_trusted' => true,
 	));
@@ -65,8 +65,8 @@ if ($show_group && elgg_instanceof($container, 'group')) {
 }
 
 $metadata = elgg_view_menu('entity', array(
-	'entity' => $etherpad,
-	'handler' => 'etherpad',
+	'entity' => $pad,
+	'handler' => 'pad',
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-entity elgg-menu-hz',
 ));
@@ -79,13 +79,13 @@ if (elgg_in_context('widgets')) {
 }
 
 if ($full) {
-	if ($etherpad->getPrivateSetting('status') == 'open') {
+	if ($pad->getPrivateSetting('status') == 'open') {
 		try {
 
 			$body = '<div class="pad-wrapper pts float">';
 			$body .= elgg_view('output/iframe', array(
-				'value' => $etherpad->getPadPath(),
-				'class' => 'etherpad float',
+				'value' => $pad->getPadPath(),
+				'class' => 'pad-iframe float',
 				'width' => '100%',
 				'height' => '400px',
 				'frameborder' => '0'
@@ -114,16 +114,16 @@ if ($full) {
 
 
 		} catch(Exception $e) {
-			$body = elgg_echo('etherpad:'. $e->getMessage());
+			$body = elgg_echo('pad:'. $e->getMessage());
 		}
 	} else {
 		$md = elgg_get_metadata(array(
-			'guid' => $etherpad->getGUID(),
+			'guid' => $pad->getGUID(),
 			'metadata_name' => 'text',
 			'limit' => 0,
 		));
 
-		$status = '<span class="status declined">' . elgg_echo('etherpad:status:closed') . '</span>';
+		$status = '<span class="status declined">' . elgg_echo('pad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
 		$owner = get_entity($md[0]->owner_guid);
 		if ($owner) { // pad closed by someone
@@ -134,11 +134,11 @@ if ($full) {
 		} else { // pad closed by cron
 			$owner_text = elgg_get_site_entity()->name;
 		}
-		$body = '<div class="elgg-heading-basic pam mvm">' . $status . elgg_echo('etherpad:infos:closed', array($time, $owner_text)) . '</div>';
-		$body .= $etherpad->text;
+		$body = '<div class="elgg-heading-basic pam mvm">' . $status . elgg_echo('pad:infos:closed', array($time, $owner_text)) . '</div>';
+		$body .= '<div class="markdown-body">' . $pad->text . '</div>';
 	}
 	$params = array(
-		'entity' => $etherpad,
+		'entity' => $pad,
 		'metadata' => $metadata,
 		'title' => false,
 		'subtitle' => $subtitle,
@@ -148,7 +148,7 @@ if ($full) {
 	$summary = elgg_view('object/elements/summary', $params);
 
 	echo elgg_view('object/elements/full', array(
-		'entity' => $etherpad,
+		'entity' => $pad,
 		'summary' => $summary,
 		'body' => $body,
 	));
@@ -156,21 +156,20 @@ if ($full) {
 } else {
 	// brief view
 
-	$excerpt = elgg_get_excerpt($etherpad->description);
+	$excerpt = elgg_get_excerpt($pad->description);
 
-	if ($etherpad->getPrivateSetting('status') != 'open') {
-		$status = '<span class="status declined mlm">' . elgg_echo('etherpad:status:closed') . '</span>';
+	if ($pad->getPrivateSetting('status') != 'open') {
+		$status = '<span class="status declined mlm">' . elgg_echo('pad:status:closed') . '</span>';
 	}
 
 	$params = array(
-		'entity' => $etherpad,
+		'entity' => $pad,
 		'metadata' => $metadata,
 		'subtitle' => $subtitle . $status,
 		'tags' => $tags,
 		'content' => $excerpt,
 	);
 	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
+	echo elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($etherpad_icon, $list_body);
 }

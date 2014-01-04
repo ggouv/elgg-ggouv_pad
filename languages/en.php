@@ -1,6 +1,6 @@
 <?php
 /**
- * Etherpads English language file
+ * pads English language file
  *
  * package ElggPad
  */
@@ -11,82 +11,82 @@ $english = array(
 	 * Menu items and titles
 	 */
 
-	'etherpad' => "Pads",
-	'etherpad:owner' => "%s's pads",
-	'etherpad:friends' => "Friends' pads",
-	'etherpad:all' => "All site pads",
-	'etherpad:add' => "Add pad",
-	'etherpad:timeslider' => 'History',
-	'etherpad:fullscreen' => 'Fullscreen',
-	'etherpad:none' => 'No pads created yet',
-	'etherpad:status:closed' => "Closed",
-	'etherpad:infos:closed' => "&nbsp; %s by %s",
+	'pad' => "Pads",
+	'pad:owner' => "%s's pads",
+	'pad:friends' => "Friends' pads",
+	'pad:all' => "All site pads",
+	'pad:add' => "Add pad",
+	'pad:timeslider' => 'History',
+	'pad:fullscreen' => 'Fullscreen',
+	'pad:none' => 'No pads created yet',
+	'pad:status:closed' => "Closed",
+	'pad:infos:closed' => "&nbsp; %s by %s",
 
-	'etherpad:group' => 'Group pads',
+	'pad:group' => 'Group pads',
 	'groups:enablepads' => 'Enable group pads',
-	'etherpad:toggle_comment' => "Show/hide comments",
-	'etherpad:toggle_markdown-preview' => "Show/hide preview",
-	'etherpad:infos' => "Informations",
-	'etherpad:lastedited' => "Edited %s",
-	'etherpad:revisions' => "%s revisions",
-	'etherpad:contributors' => "Contributors of this pad :",
-	'etherpad:convert:markdown_wiki' => "Convert this pad to wiki page",
-	'etherpad:convert:markdown_blog' => "Convert this pad to blog article",
-	'etherpad:close' => "Close this pad",
-	'etherpad:close:confirm' => "Voulez-vous vraiment fermer ce pad ? Il ne sera plus possible de l'éditer et l'historique sera supprimé. Le texte, les auteurs et le nombre de révisions seront conservés.",
-	'etherpad:create:info' => "Pads are not permanant, don't use it like a definitive article.",
+	'pad:toggle_comment' => "Show/hide comments",
+	'pad:toggle_markdown-preview' => "Show/hide preview",
+	'pad:infos' => "Informations",
+	'pad:lastedited' => "Edited %s",
+	'pad:revisions' => "%s revisions",
+	'pad:contributors' => "Contributors of this pad :",
+	'pad:convert:markdown_wiki' => "Convert this pad to wiki page",
+	'pad:convert:markdown_blog' => "Convert this pad to blog article",
+	'pad:close' => "Close this pad",
+	'pad:close:confirm' => "Voulez-vous vraiment fermer ce pad ? Il ne sera plus possible de l'éditer et l'historique sera supprimé. Le texte, les auteurs et le nombre de révisions seront conservés.",
+	'pad:create:info' => "Pads are not permanant, don't use it like a definitive article.",
 
 
 	/**
 	 * River
 	 */
-	'river:create:object:etherpad' => '%s created a new collaborative pad %s',
-	'river:update:object:etherpad' => '%s updated the collaborative pad %s',
-	'river:comment:object:etherpad' => '%s commented on the collaborative pad %s',
+	'river:create:object:pad' => '%s created a new collaborative pad %s',
+	'river:update:object:pad' => '%s updated the collaborative pad %s',
+	'river:comment:object:pad' => '%s commented on the collaborative pad %s',
 
-	'item:object:etherpad' => 'Pads',
+	'item:object:pad' => 'Pads',
 
 	/**
 	 * Status messages
 	 */
 
-	'etherpad:saved' => "Your pad was successfully saved.",
-	'etherpad:delete:success' => "Your pad was successfully deleted.",
-	'etherpad:delete:failure' => "Your pad could not be deleted. Please try again.",
-	'etherpad:Empty or No Response from the server' => "Empty or No Response from the server",
-	'etherpad:close:success' => "Your pad was successfully closed.",
-	'etherpad:close:failure' => "Your pad could not be closed. Please try again.",
+	'pad:saved' => "Your pad was successfully saved.",
+	'pad:delete:success' => "Your pad was successfully deleted.",
+	'pad:delete:failure' => "Your pad could not be deleted. Please try again.",
+	'pad:Empty or No Response from the server' => "Empty or No Response from the server",
+	'pad:close:success' => "Your pad was successfully closed.",
+	'pad:close:failure' => "Your pad could not be closed. Please try again.",
 
 	/**
 	 * Edit page
 	 */
 
-	 'etherpad:title' => "Title",
-	 'etherpad:tags' => "Tags",
-	 'etherpad:description' => "Description",
-	 'etherpad:access_id' => "Read access",
-	 'etherpad:write_access_id' => "Write access",
+	 'pad:title' => "Title",
+	 'pad:tags' => "Tags",
+	 'pad:description' => "Description",
+	 'pad:access_id' => "Read access",
+	 'pad:write_access_id' => "Write access",
 
 	/**
 	 * Admin settings
 	 */
 
-	'etherpad:etherpadhost' => "Etherpad lite host address:",
-	'etherpad:etherpadkey' => "Etherpad lite api key:",
-	'etherpad:showchat' => "Show chat?",
-	'etherpad:linenumbers' => "Show line numbers?",
-	'etherpad:showcontrols' => "Show controls?",
-	'etherpad:monospace' => "Use monospace font?",
-	'etherpad:showcomments' => "Show comments?",
-	'etherpad:newpadtext' => "New pad text:",
-	'etherpad:pad:message' => 'New pad created successfully.',
-	'etherpad:cron:mail:subject' => 'Errors with cron etherpad',
+	'pad:padhost' => "pad lite host address:",
+	'pad:padkey' => "pad lite api key:",
+	'pad:showchat' => "Show chat?",
+	'pad:linenumbers' => "Show line numbers?",
+	'pad:showcontrols' => "Show controls?",
+	'pad:monospace' => "Use monospace font?",
+	'pad:showcomments' => "Show comments?",
+	'pad:newpadtext' => "New pad text:",
+	'pad:pad:message' => 'New pad created successfully.',
+	'pad:cron:mail:subject' => 'Errors with cron pad',
 
 	/**
 	 * Widget
 	 */
-	'etherpad:profile:numbertodisplay' => "Number of pads to display",
-	'etherpad:profile:widgetdesc' => "Display your latest pads",
+	'pad:profile:numbertodisplay' => "Number of pads to display",
+	'pad:profile:widgetdesc' => "Display your latest pads",
 
 );
 

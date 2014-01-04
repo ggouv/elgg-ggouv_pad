@@ -8,7 +8,7 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->etherpad_enable != "yes") {
+if ($group->pad_enable == 'no') {
 	return true;
 }
 
@@ -22,7 +22,7 @@ $all_link = elgg_view('output/url', array(
 elgg_push_context('widgets');
 $options = array(
 	'type' => 'object',
-	'subtypes' => 'etherpad',
+	'subtypes' => 'pad',
 	'container_guid' => elgg_get_page_owner_guid(),
 	'limit' => 6,
 	'full_view' => false,
@@ -32,17 +32,17 @@ $content = elgg_list_entities($options);
 elgg_pop_context();
 
 if (!$content) {
-	$content = '<p>' . elgg_echo('etherpad:none') . '</p>';
+	$content = '<p>' . elgg_echo('pad:none') . '</p>';
 }
 
 $new_link = elgg_view('output/url', array(
 	'href' => "pad/add/$group->guid",
-	'text' => elgg_echo('etherpad:add'),
+	'text' => elgg_echo('pad:add'),
 	'is_trusted' => true,
 ));
 
 echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('etherpad:group'),
+	'title' => elgg_echo('pad:group'),
 	'content' => $content,
 	'all_link' => $all_link,
 	'add_link' => $new_link,

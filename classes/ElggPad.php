@@ -1,6 +1,6 @@
 <?php
 /**
- * Elgg EtherPad
+ * Elgg ggouv_pad
  *
  *
  */
@@ -19,7 +19,7 @@ class ElggPad extends ElggObject {
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
 
-		$this->attributes['subtype'] = "etherpad";
+		$this->attributes['subtype'] = 'pad';
 	}
 
 	function save(){
@@ -38,7 +38,7 @@ class ElggPad extends ElggObject {
 
 			$padID = $this->getMetadata('pname');
 
-			//set etherpad permissions
+			//set pad permissions
 			if($this->access_id == ACCESS_PUBLIC) {
 				$this->get_pad_client()->setPublicStatus($padID, "true");
 			} else {
@@ -73,7 +73,7 @@ class ElggPad extends ElggObject {
 		$revisions = $this->getRevisionsCount();
 		$lastedit = round($this->getLastEdited()/1000);
 
-		// delete pad on etherpad database
+		// delete pad on pad database
 		try {
 			$this->startSession();
 			$text = $this->getPadHTML();
@@ -107,28 +107,28 @@ class ElggPad extends ElggObject {
 
 		require_once(elgg_get_plugins_path() . 'elgg-ggouv_pad/vendors/etherpad-lite-client.php');
 
-		// Etherpad: Create an instance
-		$apikey = elgg_get_plugin_setting('etherpad_key', 'elgg-ggouv_pad');
-		$apiurl = elgg_get_plugin_setting('etherpad_host', 'elgg-ggouv_pad') . "/api";
+		// pad: Create an instance
+		$apikey = elgg_get_plugin_setting('pad_key', 'elgg-ggouv_pad');
+		$apiurl = elgg_get_plugin_setting('pad_host', 'elgg-ggouv_pad') . "/api";
 		$this->pad = new EtherpadLiteClient($apikey, $apiurl);
 		return $this->pad;
 	}
 
-	protected function startSession(){
+	/*protected function startSession(){
 		if($this->container_guid) {
 			$container_guid = $this->container_guid;
 		} else {
 			$container_guid = elgg_get_logged_in_user_guid();
 		}
-		//Etherpad: Create an etherpad group for the elgg container
+		//pad: Create an pad group for the elgg container
 		$mappedGroup = $this->get_pad_client()->createGroupIfNotExistsFor($container_guid);
 		$this->groupID = $mappedGroup->groupID;
 
-		//Etherpad: Create an author(etherpad user) for logged in user
+		//pad: Create an author(pad user) for logged in user
 		$author = $this->get_pad_client()->createAuthorIfNotExistsFor(elgg_get_logged_in_user_entity()->username);
 		$this->authorID = $author->authorID;
 
-		//Etherpad: Create session
+		//pad: Create session
 		$validUntil = mktime(date("H"), date("i")+5, 0, date("m"), date("d"), date("y")); // 5 minutes in the future
 		$session = $this->get_pad_client()->createSession($this->groupID, $this->authorID, $validUntil);
 		$sessionID = $session->sessionID;
@@ -136,14 +136,60 @@ class ElggPad extends ElggObject {
 		$domain = "." . parse_url(elgg_get_site_url(), PHP_URL_HOST);
 
 		if(!setcookie('sessionID', $sessionID, $validUntil, '/', $domain)){
-			throw new Exception(elgg_echo('etherpad:error:cookies_required'));
+			throw new Exception(elgg_echo('pad:error:cookies_required'));
 		}
 
 		return $sessionID;
+	}*/
+
+	function startSession(){
+			if (isset($this->container_guid)) {
+					$container = get_entity($this->container_guid);
+			} else {
+					$container = elgg_get_logged_in_user_entity();
+			}
+
+			if (isset($this->owner_guid)) {
+					$user = get_entity($this->owner_guid);
+			} else {
+					$user = elgg_get_logged_in_user_entity();
+			}
+
+			//$site_mask = preg_replace('https?://', '@', elgg_get_site_url());
+			$site_mask = str_replace('http://', '@', elgg_get_site_url());
+			$site_mask = str_replace('https://', '@', $site_mask);
+
+			//Etherpad: Create an etherpad group for the elgg container
+	//        if (!isset($container->etherpad_group_id)) {
+					$mappedGroup = $this->get_pad_client()->createGroupIfNotExistsFor($container->guid . $site_mask);
+					$container->etherpad_group_id = $mappedGroup->groupID;
+	//        }
+			$this->groupID = $container->etherpad_group_id;
+
+			//Etherpad: Create an author(etherpad user) for logged in user
+			//if (!isset($user->etherpad_author_id)) {
+					$author = $this->get_pad_client()->createAuthorIfNotExistsFor($user->username . $site_mask);
+					$user->etherpad_author_id = $author->authorID;
+	//        }
+			$this->authorID = $user->etherpad_author_id;
+
+			//error_log("e $this->groupID $this->authorID");
+			//Etherpad: Create session
+			$validUntil = mktime(date("H"), date("i")+5, 0, date("m"), date("d"), date("y")); // 5 minutes in the future
+			$session = $this->get_pad_client()->createSession($this->groupID, $this->authorID, $validUntil);
+			$sessionID = $session->sessionID;
+
+			$domain = "." . parse_url(elgg_get_site_url(), PHP_URL_HOST);
+
+			if(!setcookie('sessionID', $sessionID, $validUntil, '/', $domain)){
+					throw new Exception(elgg_echo('etherpad:error:cookies_required'));
+			}
+
+			return $sessionID;
 	}
 
 	protected function getAddress(){
-		return elgg_get_plugin_setting('etherpad_host', 'elgg-ggouv_pad') . "/p/". $this->getMetadata('pname');
+		return elgg_get_plugin_setting('pad_host', 'elgg-ggouv_pad') . "/p/". $this->getMetadata('pname');
 	}
 
 	protected function getTimesliderAddress(){
@@ -158,7 +204,7 @@ class ElggPad extends ElggObject {
 			$readonly = $this->get_pad_client()->getReadOnlyID($padID)->readOnlyID;
 			$this->setMetaData('readOnlyID', $readonly);
 		}
-		return elgg_get_plugin_setting('etherpad_host', 'elgg-ggouv_pad') . "/ro/". $readonly;
+		return elgg_get_plugin_setting('pad_host', 'elgg-ggouv_pad') . "/ro/". $readonly;
 	}
 
 	function getPadPath($timeslider = false){
@@ -188,7 +234,7 @@ class ElggPad extends ElggObject {
 
 		$this->startSession();
 
-		$container = $this->getContainerEntity();
+		/*$container = $this->getContainerEntity();
 
 		if($container->canWriteToContainer() && !$timeslider) {
 			return $this->getAddress() . $options;
@@ -196,6 +242,14 @@ class ElggPad extends ElggObject {
 			return $this->getTimesliderAddress() . $options;
 		} else {
 			return $this->getReadOnlyAddress() . $options;
+		}*/
+
+		if($this->canEdit() && !$timeslider) {
+				return $this->getAddress() . $options;
+		} elseif ($this->canEdit() && $timeslider) {
+				return $this->getTimesliderAddress() . $options;
+		} else {
+				return $this->getReadOnlyAddress() . $options;
 		}
 	}
 
@@ -209,16 +263,16 @@ class ElggPad extends ElggObject {
 		return $this->get_pad_client()->getHTML($padID)->html;
 	}
 
-	function getPadMarkdown(){
-		elgg_load_library('etherpad:markdownify');
+	function getPadMarkdown($html = false){
+		elgg_load_library('pad:markdownify');
 
-		$html = $this->getPadHTML();
+		if (!$html) $html = $this->getPadHTML();
 		if (ini_get('magic_quotes_gpc')) {
 			$html = stripslashes($html);
 		}
 
 		$md = new Markdownify_Extra(false, false, false);
-		return $md->parseString($html);
+		return str_replace(' ', '', $md->parseString($html));
 	}
 
 	function getPadUsers(){ // doesn't work ??

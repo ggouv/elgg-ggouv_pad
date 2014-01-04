@@ -1,8 +1,8 @@
 <?php
 /**
- * Elgg etherpad widget edit view
+ * Elgg pad widget edit view
  *
- * @package etherpad
+ * @package pad
  */
 
 // set default value
@@ -19,6 +19,6 @@ $dropdown = elgg_view('input/dropdown', $params);
 
 ?>
 <div>
-	<?php echo elgg_echo('etherpad:profile:numbertodisplay'); ?>:
+	<?php echo elgg_echo('pad:profile:numbertodisplay'); ?>:
 	<?php echo $dropdown; ?>
 </div>

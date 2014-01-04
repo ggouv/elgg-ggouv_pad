@@ -7,14 +7,14 @@
 
 gatekeeper();
 
-$page_guid = (int)get_input('guid');
-$page = get_entity($page_guid);
-if (!$page) {
+$pad_guid = (int)get_input('guid');
+$pad = get_entity($pad_guid);
+if (!$pad) {
 	register_error(elgg_echo('noaccess'));
 	forward('');
 }
 
-$container = $page->getContainerEntity();
+$container = $pad->getContainerEntity();
 if (!$container) {
 	register_error(elgg_echo('noaccess'));
 	forward('');
@@ -22,18 +22,18 @@ if (!$container) {
 
 elgg_set_page_owner_guid($container->getGUID());
 
-elgg_push_breadcrumb($page->title, $page->getURL());
+elgg_push_breadcrumb($pad->title, $pad->getURL());
 elgg_push_breadcrumb(elgg_echo('edit'));
 
-$title = elgg_echo("pages:edit");
+$title = elgg_echo('pad:edit', array($pad->title));
 
-if ($page->canEdit()) {
+if ($pad->canEdit()) {
 	$content = elgg_view('output/longtext', array(
-		'value' => elgg_echo('etherpad:create:info'),
+		'value' => elgg_echo('pad:create:info'),
 		'class' => 'pbm'
 	));
-	$vars = etherpad_prepare_form_vars($page);
-	$content .= elgg_view_form('etherpad/save', array(), $vars);
+	$vars = pad_prepare_form_vars($pad);
+	$content .= elgg_view_form('pad/save', array(), $vars);
 } else {
 	$content = elgg_echo("pages:noaccess");
 }

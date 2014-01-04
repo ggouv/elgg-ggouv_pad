@@ -24,7 +24,7 @@ elgg.ggouv_pad.init = function() {
 
 	// for extensible template
 	$(window).bind('resize.pad', function() {
-		var $ie = $('iframe.etherpad');
+		var $ie = $('iframe.pad-iframe');
 
 		if ($ie.length ) {
 			$ie.add('#md-preview-pad').height($(window).height() - $ie.position().top - 48);
@@ -40,9 +40,9 @@ elgg.register_hook_handler('init', 'system', elgg.ggouv_pad.init);
  * @return {[type]} [description]
  */
 elgg.ggouv_pad.reload = function() {
-	if ($('iframe.etherpad').length) {
+	if ($('iframe.pad-iframe').length) {
 		var $b = $('body').addClass('fixed-pad'),
-			$ie = $('iframe.etherpad'),
+			$ie = $('iframe.pad-iframe'),
 			$et = $('.elgg-content'),
 			$ec = $('.elgg-comments').addClass('hidden'),
 			$mp = $('.elgg-menu-item-toggle-markdown-preview').removeClass('hidden'),
@@ -71,7 +71,7 @@ elgg.ggouv_pad.reload = function() {
 				// ugly way to get pad text. @todo find another way. http://stackoverflow.com/questions/4039384/how-do-i-programatically-fetch-the-live-plaintext-contents-of-an-etherpad doesn't work padeditor is undefined.
 				if ($('#md-preview-pad').html() == '') {
 					console.log('ui');
-					var padHtml = $('.etherpad')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow.$('#innerdocbody').html();
+					var padHtml = $('.pad-iframe')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow.$('#innerdocbody').html();
 					$('#md-preview-pad').html(elgg.markdown_wiki.ShowdownConvert($('<div>').html(padHtml.replace(/<div id="magic/g, '\n<div id="magic')).text()));
 				}
 

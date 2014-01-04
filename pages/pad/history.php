@@ -20,14 +20,14 @@ if (!$container) {
 elgg_set_page_owner_guid($container->getGUID());
 
 if (elgg_instanceof($container, 'group')) {
-	elgg_push_breadcrumb($container->name, "etherpad/group/$container->guid/all");
+	elgg_push_breadcrumb($container->name, "pad/group/$container->guid/all");
 } else {
-	elgg_push_breadcrumb($container->name, "etherpad/owner/$container->username");
+	elgg_push_breadcrumb($container->name, "pad/owner/$container->username");
 }
 elgg_push_breadcrumb($pad->title, $pad->getURL());
-elgg_push_breadcrumb(elgg_echo('etherpad:timeslider'));
+elgg_push_breadcrumb(elgg_echo('pad:timeslider'));
 
-$title = $pad->title . ": " . elgg_echo('etherpad:timeslider');
+$title = $pad->title . ": " . elgg_echo('pad:timeslider');
 
 $content = elgg_view_entity($pad, array(
 	'timeslider' => true,

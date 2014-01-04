@@ -1,8 +1,8 @@
 <?php
 /**
- * New etherpad river entry
+ * New pad river entry
  *
- * @package ElggEtherpad
+ * @package Elgg-ggouv_pad
  */
 
 $object = $vars['item']->getObjectEntity();

@@ -5,11 +5,11 @@
  * @package ElggPad
  */
 
-$variables = elgg_get_config('etherpad');
+$variables = elgg_get_config('pad');
 foreach ($variables as $name => $type) {
 ?>
-<div>
-	<label><?php echo elgg_echo("etherpad:$name") ?></label>
+<div class="<?php echo $name?>-block">
+	<label><?php echo elgg_echo("pad:$name") ?></label>
 	<?php
 		if ($type != 'longtext') {
 			echo '<br />';
@@ -17,7 +17,7 @@ foreach ($variables as $name => $type) {
 	?>
 	<?php echo elgg_view("input/$type", array(
 			'name' => $name,
-			'value' => $vars[$name],
+			'value' => $vars[$name]
 		));
 	?>
 </div>

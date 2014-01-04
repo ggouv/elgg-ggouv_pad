@@ -5,7 +5,7 @@
  * @package ElggPad
  */
 
-$variables = elgg_get_config('etherpad');
+$variables = elgg_get_config('pad');
 $input = array();
 foreach ($variables as $name => $type) {
 	$input[$name] = get_input($name);
@@ -18,12 +18,12 @@ foreach ($variables as $name => $type) {
 }
 
 // Get guids
-$page_guid = (int)get_input('page_guid');
+$pad_guid = (int)get_input('page_guid');
 $container_guid = (int)get_input('container_guid');
 
 $container = get_entity($container_guid);
 
-elgg_make_sticky_form('etherpad');
+elgg_make_sticky_form('pad');
 
 if (!$input['title']) {
 	register_error(elgg_echo('pages:error:no_title'));
@@ -35,38 +35,39 @@ if (!$container->canWriteToContainer()) {
 	forward(REFERER);
 }
 
-if ($page_guid) {
-	$page = new ElggPad($page_guid);
-	if (!$page || !$page->canEdit()) {
+if ($pad_guid) {
+	$pad = new ElggPad($pad_guid);
+	if (!$pad || !$pad->canEdit()) {
 		register_error(elgg_echo('pages:error:no_save'));
 		forward(REFERER);
 	}
-	$new_page = false;
+	$new_pad = false;
 } else {
-	$page = new ElggPad();
-	$new_page = true;
-	$page->container_guid = $container_guid;
+	$pad = new ElggPad();
+	$new_pad = true;
 }
 
 if (sizeof($input) > 0) {
 	foreach ($input as $name => $value) {
-		$page->$name = $value;
+		$pad->$name = $value;
 	}
 }
 
-if ($page->save()) {
+$pad->container_guid = $container_guid;
 
-	elgg_clear_sticky_form('etherpad');
+if ($pad->save()) {
 
-	system_message(elgg_echo('etherpad:saved'));
+	elgg_clear_sticky_form('pad');
 
-	if ($new_page) {
-		set_private_setting($page->getGUID(), 'status', 'open');
-		add_to_river('river/object/etherpad/create', 'create', elgg_get_logged_in_user_guid(), $page->getGUID());
+	system_message(elgg_echo('pad:saved'));
+
+	if ($new_pad) {
+		set_private_setting($pad->getGUID(), 'status', 'open');
+		add_to_river('river/object/pad/create', 'create', elgg_get_logged_in_user_guid(), $pad->getGUID());
 	}
 
-	forward($page->getURL());
+	forward($pad->getURL());
 } else {
-	register_error(elgg_echo('etherpad:error:no_save'));
+	register_error(elgg_echo('pad:error:no_save'));
 	forward(REFERER);
 }

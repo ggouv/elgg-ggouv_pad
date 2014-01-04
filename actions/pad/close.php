@@ -12,7 +12,7 @@ if ($pad) {
 		$container = get_entity($pad->container_guid);
 
 		if ($pad->closePad()) {
-			system_message(elgg_echo('etherpad:close:success'));
+			system_message(elgg_echo('pad:close:success'));
 
 			forward($pad->getURL());
 
@@ -20,5 +20,5 @@ if ($pad) {
 	}
 }
 
-register_error(elgg_echo('etherpad:close:failure'));
+register_error(elgg_echo('pad:close:failure'));
 forward(REFERER);

@@ -6,10 +6,10 @@
 /**
  * Prepare the add/edit form variables
  *
- * @param ElggObject $page
+ * @param ElggObject $pad
  * @return array
  */
-function etherpad_prepare_form_vars($page = null) {
+function pad_prepare_form_vars($pad = null) {
 
 	// input names => defaults
 	$values = array(
@@ -20,25 +20,25 @@ function etherpad_prepare_form_vars($page = null) {
 		'tags' => '',
 		'container_guid' => elgg_get_page_owner_guid(),
 		'guid' => null,
-		'entity' => $page,
+		'entity' => $pad,
 	);
 
-	if ($page) {
+	if ($pad) {
 		foreach (array_keys($values) as $field) {
-			if (isset($page->$field)) {
-				$values[$field] = $page->$field;
+			if (isset($pad->$field)) {
+				$values[$field] = $pad->$field;
 			}
 		}
 	}
 
-	if (elgg_is_sticky_form('page')) {
-		$sticky_values = elgg_get_sticky_values('page');
+	if (elgg_is_sticky_form('pad')) {
+		$sticky_values = elgg_get_sticky_values('pad');
 		foreach ($sticky_values as $key => $value) {
 			$values[$key] = $value;
 		}
 	}
 
-	elgg_clear_sticky_form('page');
+	elgg_clear_sticky_form('pad');
 
 	return $values;
 }

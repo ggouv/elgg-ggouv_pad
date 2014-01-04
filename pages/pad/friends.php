@@ -10,16 +10,16 @@ if (!$owner) {
 	forward('pad/all');
 }
 
-elgg_push_breadcrumb($owner->name, "etherpad/owner/$owner->username");
+elgg_push_breadcrumb($owner->name, "pad/owner/$owner->username");
 elgg_push_breadcrumb(elgg_echo('friends'));
 
 elgg_register_title_button();
 
-$title = elgg_echo('etherpad:friends');
+$title = elgg_echo('pad:friends');
 
-$content = list_user_friends_objects($owner->guid, 'etherpad', 10, false);
+$content = list_user_friends_objects($owner->guid, 'pad', 10, false);
 if (!$content) {
-	$content = elgg_echo('etherpad:none');
+	$content = elgg_echo('pad:none');
 }
 
 $params = array(

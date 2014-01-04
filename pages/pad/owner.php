@@ -7,13 +7,13 @@
 
 $owner = elgg_get_page_owner_entity();
 if (!$owner) {
-	forward('etherpad/all');
+	forward('pad/all');
 }
 
 // access check for closed groups
 group_gatekeeper();
 
-$title = elgg_echo('etherpad:owner', array($owner->name));
+$title = elgg_echo('pad:owner', array($owner->name));
 
 elgg_push_breadcrumb($owner->name);
 
@@ -21,12 +21,12 @@ elgg_register_title_button();
 
 $content = elgg_list_entities(array(
 	'types' => 'object',
-	'subtypes' => 'etherpad',
+	'subtypes' => 'pad',
 	'container_guid' => elgg_get_page_owner_guid(),
 	'full_view' => false,
 ));
 if (!$content) {
-	$content = '<p>' . elgg_echo('etherpad:none') . '</p>';
+	$content = '<p>' . elgg_echo('pad:none') . '</p>';
 }
 
 $filter_context = '';
@@ -38,7 +38,7 @@ $params = array(
 	'filter_context' => $filter_context,
 	'content' => $content,
 	'title' => $title,
-	'sidebar' => elgg_view('etherpad/sidebar'),
+	'sidebar' => elgg_view('pad/sidebar'),
 );
 
 if (elgg_instanceof($owner, 'group')) {
