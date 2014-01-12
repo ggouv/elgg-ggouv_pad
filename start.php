@@ -23,8 +23,8 @@ function pad_init() {
 	elgg_register_page_handler('pad', 'pad_page_handler');
 
 	// write permission plugin hooks
-	elgg_register_plugin_hook_handler('permissions_check', 'object', 'pad_write_permission_check');
-	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'pad_container_permission_check');
+	//elgg_register_plugin_hook_handler('permissions_check', 'object', 'pad_write_permission_check');
+	//elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'pad_container_permission_check');
 
 	// Extend view
 	elgg_extend_view('css/elgg', 'pad/css');
@@ -149,7 +149,7 @@ function pad_owner_block_menu($hook, $type, $return, $params) {
  * @param unknown_type $returnvalue
  * @param unknown_type $params
  */
-function pad_write_permission_check($hook, $entity_type, $returnvalue, $params)
+/*function pad_write_permission_check($hook, $entity_type, $returnvalue, $params)
 {
 	if ($params['entity']->getSubtype() == 'pad') {
 
@@ -165,7 +165,7 @@ function pad_write_permission_check($hook, $entity_type, $returnvalue, $params)
 			}
 		}
 	}
-}
+}*/
 
 
 /**
@@ -176,7 +176,7 @@ function pad_write_permission_check($hook, $entity_type, $returnvalue, $params)
  * @param unknown_type $returnvalue
  * @param unknown_type $params
  */
-function pad_container_permission_check($hook, $entity_type, $returnvalue, $params) {
+/*function pad_container_permission_check($hook, $entity_type, $returnvalue, $params) {
 
 	if (elgg_get_context() == 'pad') {
 		if (elgg_get_page_owner_guid()) {
@@ -196,8 +196,7 @@ function pad_container_permission_check($hook, $entity_type, $returnvalue, $para
 			}
 		}
 	}
-
-}
+}*/
 
 
 
@@ -229,8 +228,6 @@ function delete_pad_cron($hook, $entity_type, $returnvalue, $params) {
 		}
 		unset($pad);
 	}
-
-
 
 	// send email if error
 	if (!empty($errors)) {

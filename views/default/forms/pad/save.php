@@ -11,7 +11,14 @@ foreach ($variables as $name => $type) {
 <div class="<?php echo $name?>-block">
 	<label><?php echo elgg_echo("pad:$name") ?></label>
 	<?php
-		if ($type != 'longtext') {
+		if ($name == 'description' && $vars['entity']) {
+			if ($vars['entity']->getPrivateSetting('status') == 'open') {
+				$vars[$name] = $vars['entity']->description;
+			} else {
+				$desc = json_decode($vars['entity']->description);
+				$vars[$name] = elgg_get_excerpt(strip_tags($desc->description), 140);
+			}
+		} else {
 			echo '<br />';
 		}
 	?>

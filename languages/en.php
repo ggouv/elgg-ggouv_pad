@@ -40,9 +40,10 @@ $english = array(
 	/**
 	 * River
 	 */
-	'river:create:object:pad' => '%s created a new collaborative pad %s',
-	'river:update:object:pad' => '%s updated the collaborative pad %s',
-	'river:comment:object:pad' => '%s commented on the collaborative pad %s',
+	'river:create:object:pad' => '%s created a new pad %s',
+	'river:update:object:pad' => '%s updated the pad %s',
+	'river:comment:object:pad' => '%s commented on the pad %s',
+	'river:close:object:pad' => "%s closed the pad %s",
 
 	'item:object:pad' => 'Pads',
 

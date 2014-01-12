@@ -31,14 +31,14 @@ if (!$input['title']) {
 }
 
 if (!$container->canWriteToContainer()) {
-	register_error(elgg_echo('pages:error:no_save'));
+	register_error(elgg_echo('pad:error:no_save'));
 	forward(REFERER);
 }
 
 if ($pad_guid) {
 	$pad = new ElggPad($pad_guid);
 	if (!$pad || !$pad->canEdit()) {
-		register_error(elgg_echo('pages:error:no_save'));
+		register_error(elgg_echo('pad:error:no_save'));
 		forward(REFERER);
 	}
 	$new_pad = false;
@@ -47,9 +47,25 @@ if ($pad_guid) {
 	$new_pad = true;
 }
 
+try {
+	$pad->get_pad_client();
+} catch(Exception $e) {
+	register_error(elgg_echo('pad:error:no_save'));
+	forward(REFERER);
+}
+
 if (sizeof($input) > 0) {
 	foreach ($input as $name => $value) {
-		$pad->$name = $value;
+		if ($name == 'description' && $pad->getPrivateSetting('status') == 'closed') {
+				$desc = json_decode($pad->description);
+
+				$pad->$name = json_encode(array(
+					'description' => $value,
+					'text' => $desc->text
+				));
+		} else {
+			$pad->$name = $value;
+		}
 	}
 }
 

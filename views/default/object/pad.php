@@ -82,7 +82,7 @@ if ($full) {
 	if ($pad->getPrivateSetting('status') == 'open') {
 		try {
 
-			$body = '<div class="pad-wrapper pts float">';
+			$body = '<div class="pad-wrapper float">';
 			$body .= elgg_view('output/iframe', array(
 				'value' => $pad->getPadPath(),
 				'class' => 'pad-iframe float',
@@ -119,9 +119,10 @@ if ($full) {
 	} else {
 		$md = elgg_get_metadata(array(
 			'guid' => $pad->getGUID(),
-			'metadata_name' => 'text',
+			'metadata_name' => 'infos',
 			'limit' => 0,
 		));
+		$desc = json_decode($pad->description);
 
 		$status = '<span class="status declined">' . elgg_echo('pad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
@@ -134,8 +135,17 @@ if ($full) {
 		} else { // pad closed by cron
 			$owner_text = elgg_get_site_entity()->name;
 		}
-		$body = '<div class="elgg-heading-basic pam mvm">' . $status . elgg_echo('pad:infos:closed', array($time, $owner_text)) . '</div>';
-		$body .= '<div class="markdown-body">' . $pad->text . '</div>';
+		$body = '<div class="elgg-heading-basic pam mvm">';
+		$body .= elgg_view('output/longtext', array(
+			'value' => $desc->description,
+			'class' => 'mtn'
+		));
+
+		$body .= '<div class="ptm">' . $status . elgg_echo('pad:infos:closed', array($time, $owner_text)) . '</div></div>';
+		//$body .= '<div class="markdown-body">' . $pad->getPadMarkdown($desc->text) . '</div>';
+		$body .= elgg_view('output/longtext', array(
+			'value' => $pad->getPadMarkdown($desc->text)
+		));
 	}
 	$params = array(
 		'entity' => $pad,
@@ -156,9 +166,11 @@ if ($full) {
 } else {
 	// brief view
 
-	$excerpt = elgg_get_excerpt($pad->description);
-
-	if ($pad->getPrivateSetting('status') != 'open') {
+	if ($pad->getPrivateSetting('status') == 'open') {
+		$excerpt = elgg_get_excerpt($pad->description);
+	} else {
+		$desc = json_decode($pad->description);
+		$excerpt = $desc->description;
 		$status = '<span class="status declined mlm">' . elgg_echo('pad:status:closed') . '</span>';
 	}
 
@@ -170,6 +182,57 @@ if ($full) {
 		'content' => $excerpt,
 	);
 	$params = $params + $vars;
-	echo elgg_view('object/elements/summary', $params);
+	if ($pad->getPrivateSetting('status') == 'open') {
+		echo '<div>' . elgg_view('object/elements/summary', $params) . '</div>';
+	} else {
+		$summary = elgg_view('object/elements/summary', $params);
+
+		$md = elgg_get_metadata(array(
+			'guid' => $pad->getGUID(),
+			'metadata_name' => 'infos',
+			'limit' => 1,
+		));
+		$infos = unserialize($md[0]->value);
+		$lastedit = elgg_view('output/friendlytime', array(
+			'time' => $infos[0]
+		));
+		$lastedit = elgg_echo('pad:lastedited', array($lastedit));
+		$revs = elgg_echo('pad:revisions', array($infos[1]));
+
+		// contributors
+		$contributors = elgg_echo('pad:contributors');
+		$body = '';
+		$authors = elgg_get_entities_from_relationship(array(
+			'relationship_guid' => $pad->getGUID(),
+			'relationship' => 'contributed_to',
+			'inverse_relationship' => true,
+			'limit' => 0
+		));
+
+		foreach($authors as $author) {
+			$body .= elgg_view_entity_icon($author, 'tiny');
+		}
+
+		echo <<<HTML
+<div class="row-fluid">
+	<div class="span6">
+		$summary
+	</div>
+	<div class="elgg-heading-basic pam mvs span6">
+		<div class="row-fluid">
+			<div class="span6">
+				<h3 class="elgg-loud mbs">$contributors</h3>
+				$body
+			</div>
+			<div class="span6">
+				<h3 class="elgg-quiet mbs">$lastedit</h3>
+				<h3 class="elgg-quiet">$revs</h3>
+			</div>
+		</div>
+	</div>
+</div>
+HTML;
+
+	}
 
 }

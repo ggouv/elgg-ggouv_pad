@@ -94,13 +94,17 @@ class ElggPad extends ElggObject {
 		$this->deleteMetadata('pname');
 		elgg_set_ignore_access($ia);
 
-		create_metadata($this->getGUID(), 'text', $text, 'text');
-		create_metadata($this->getGUID(), 'infos', serialize(array($lastedit, $revisions)), 'text');
+		$this->description = json_encode(array(
+			'description' => $this->description,
+			'text' => $text
+		));
+		$this->infos = serialize(array($lastedit, $revisions));
+		$this->save();
 
 		return true;
 	}
 
-	protected function get_pad_client(){
+	function get_pad_client(){
 		if($this->pad){
 			return $this->pad;
 		}
@@ -234,7 +238,7 @@ class ElggPad extends ElggObject {
 
 		$this->startSession();
 
-		/*$container = $this->getContainerEntity();
+		$container = $this->getContainerEntity();
 
 		if($container->canWriteToContainer() && !$timeslider) {
 			return $this->getAddress() . $options;
@@ -242,14 +246,6 @@ class ElggPad extends ElggObject {
 			return $this->getTimesliderAddress() . $options;
 		} else {
 			return $this->getReadOnlyAddress() . $options;
-		}*/
-
-		if($this->canEdit() && !$timeslider) {
-				return $this->getAddress() . $options;
-		} elseif ($this->canEdit() && $timeslider) {
-				return $this->getTimesliderAddress() . $options;
-		} else {
-				return $this->getReadOnlyAddress() . $options;
 		}
 	}
 
@@ -267,12 +263,35 @@ class ElggPad extends ElggObject {
 		elgg_load_library('pad:markdownify');
 
 		if (!$html) $html = $this->getPadHTML();
+
+		// clean html
 		if (ini_get('magic_quotes_gpc')) {
 			$html = stripslashes($html);
 		}
 
+		$html = html_entity_decode($html,ENT_QUOTES,"UTF-8");
+
+		// clean markdown links
+		$html = preg_replace('/\]\(<a href="(.*)\)">\1\)<\/a>/', ']($1)', $html);
+		// preserve plain links
+		$html = preg_replace('/<a href="(.*)">\1<\/a>/', '$1', $html);
+
 		$md = new Markdownify_Extra(false, false, false);
-		return str_replace(' ', '', $md->parseString($html));
+		$md = str_replace(' ', '', $md->parseString($html));
+
+		// clean ---
+		$md = preg_replace('/\\\---\|/', '---', $md);
+		// clean ```
+		$md = preg_replace('/\\\``\\\`/', '```', $md);
+
+		// clean bold and italic, aka * _ ** __
+		$md = preg_replace('/\\\\[\*|_](.*)\\\\[\*|_]/', '*$1*', $md);
+		$md = preg_replace('/\\\\[\*|_](.*)\\\\[\*|_]/', '*$1*', $md); // yes, do it two times
+
+		// remade link
+		$md = preg_replace('/\\\\\[(.*)\\\\\]\(/', '[$1](', $md);
+
+		return str_replace(' ', '', $md);
 	}
 
 	function getPadUsers(){ // doesn't work ??

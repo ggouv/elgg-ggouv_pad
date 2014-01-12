@@ -49,6 +49,7 @@ elgg.ggouv_pad.reload = function() {
 			$pm = $('.pad-wrapper .pane-markdown, .pad-wrapper .markdown-menu'),
 			Height = $(window).height() - $ie.position().top - 48;
 
+		$('.elgg-layout-one-sidebar').css('margin-right', '-=10px');
 		$ie.height(Height);
 		$('#md-preview-pad, .pad-wrapper .help-markdown').height(Height-10);
 
@@ -94,6 +95,7 @@ elgg.ggouv_pad.reload = function() {
 
 	} else {
 		$('body').removeClass('fixed-pad');
+		//$('.pad-iframe')[0].contentWindow.pad.socket.$events.disconnect();
 	}
 }
 

@@ -47,6 +47,7 @@ Au bout de trois mois, si le pad n'a pas été utilisé depuis plus d'un mois, i
 	'river:create:object:pad' => "%s a créé le pad %s",
 	'river:update:object:pad' => "%s a mis à jour le pad %s",
 	'river:comment:object:pad' => "%s a commenté le pad %s",
+	'river:close:object:pad' => "%s a fermé le pad %s",
 
 	'item:object:pad' => 'Pads',
 
@@ -60,6 +61,7 @@ Au bout de trois mois, si le pad n'a pas été utilisé depuis plus d'un mois, i
 	'pad:Empty or No Response from the server' => "Le serveur de pads semble être à l'arrêt. Contactez un membre du groupe !dev pour plus d'informations...",
 	'pad:close:success' => "Le pad a été fermé.",
 	'pad:close:failure' => "Le pad ne peux pas être fermé.",
+	'pad:error:no_save' => "Le pad ne peut pas être enregistré.",
 
 	/**
 	 * Edit page

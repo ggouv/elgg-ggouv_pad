@@ -12,34 +12,20 @@ if ($pad_guid) { // pad view
 	$pad = get_entity($pad_guid);
 
 	if ($pad->getPrivateSetting('status') == 'open') {
-		try {
-			$pad = new ElggPad($pad_guid);
-
-			// infos
-			$title = elgg_echo('pad:infos');
-
-			$lastedit = elgg_view('output/friendlytime', array(
-				'time' => $pad->getLastEdited()/1000
-			));
-			$body = elgg_echo('pad:lastedited', array($lastedit));
-			$body .= '<br/>' . elgg_echo('pad:revisions', array('<span id="pad-revisions-count">' . $pad->getRevisionsCount() . '</span>'));
-			echo elgg_view_module('aside', $title, $body, array('id' => 'pad-infos'));
-
-			// contributors
-			$title = elgg_echo('pad:contributors');
-			$body = '';
-
-			$authors = $pad->listAuthorsNamesOfPad();
-			$authors = array_unique($authors);
-			foreach($authors as $author) {
-				$user = get_user_by_username($author);
-				$body .= elgg_view_entity_icon($user, 'small');
-			}
-			echo elgg_view_module('aside', $title, $body);
-
-		} catch (Exception $e){
-			return false;
-		}
+		// infos and contributors are filled by etherpad plugin ep_ggouv
+		$lastedit = elgg_view('output/friendlytime', array(
+			'time' => ''
+		));
+		$body = elgg_echo('pad:lastedited', array($lastedit));
+		$body .= '<br/><span id="pad-revisions-count"></span><span id="pad-savedRevisions-count"></span>';
+		echo elgg_view_module('aside ptm', elgg_echo('pad:infos'), $body, array(
+			'id' => 'pad-infos',
+			'class' => 'hidden'
+		));
+		echo elgg_view_module('aside', elgg_echo('pad:contributors'), '<ul></ul>', array(
+			'id' => 'pad-authors',
+			'class' => 'hidden'
+		));
 	} else {
 		// infos
 		$title = elgg_echo('pad:infos');
@@ -56,7 +42,7 @@ if ($pad_guid) { // pad view
 		));
 		$body = elgg_echo('pad:lastedited', array($lastedit));
 		$body .= '<br/>' . elgg_echo('pad:revisions', array($infos[1]));
-		echo elgg_view_module('aside', $title, $body);
+		echo elgg_view_module('aside ptm', $title, $body);
 
 		// contributors
 		$title = elgg_echo('pad:contributors');
