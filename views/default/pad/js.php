@@ -49,7 +49,13 @@ elgg.ggouv_pad.reload = function() {
 			$pm = $('.pad-wrapper .pane-markdown, .pad-wrapper .markdown-menu'),
 			Height = $(window).height() - $ie.position().top - 48,
 			getAceFrame = function() {
-				return $('.pad-iframe')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow;
+				var padFrame = $('.pad-iframe')[0].contentWindow;
+
+				if (padFrame.$('iframe[name="ace_outer"]').length) {
+					return padFrame.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow;
+				} else {
+					return padFrame;
+				}
 			};
 
 		$('.elgg-layout-one-sidebar').css('margin-right', '-=10px');
@@ -109,7 +115,7 @@ elgg.ggouv_pad.reload = function() {
 					aceHead = getAceFrame().$('head');
 
 				aceHead.find('#hoveredContributors').remove();
-				aceHead.append('<style id="hoveredContributors" type="text/css">#innerdocbody span:not(.'+authorClass+') {opacity:0.3;}</style>');
+				aceHead.append('<style id="hoveredContributors" type="text/css">#innerdocbody span:not(.'+authorClass+'),#padcontent span:not(.'+authorClass+') {opacity:0.3;}</style>');
 			},
 			mouseleave: function() {
 				getAceFrame().$('head').find('#hoveredContributors').remove();
