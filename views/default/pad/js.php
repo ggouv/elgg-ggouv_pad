@@ -47,7 +47,10 @@ elgg.ggouv_pad.reload = function() {
 			$ec = $('.elgg-comments').addClass('hidden'),
 			$mp = $('.elgg-menu-item-toggle-markdown-preview').removeClass('hidden'),
 			$pm = $('.pad-wrapper .pane-markdown, .pad-wrapper .markdown-menu'),
-			Height = $(window).height() - $ie.position().top - 48;
+			Height = $(window).height() - $ie.position().top - 48,
+			getAceFrame = function() {
+				return $('.pad-iframe')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow;
+			};
 
 		$('.elgg-layout-one-sidebar').css('margin-right', '-=10px');
 		$ie.height(Height);
@@ -71,8 +74,7 @@ elgg.ggouv_pad.reload = function() {
 
 				// ugly way to get pad text. @todo find another way. http://stackoverflow.com/questions/4039384/how-do-i-programatically-fetch-the-live-plaintext-contents-of-an-etherpad doesn't work padeditor is undefined.
 				if ($('#md-preview-pad').html() == '') {
-					console.log('ui');
-					var padHtml = $('.pad-iframe')[0].contentWindow.$('iframe[name="ace_outer"]')[0].contentWindow.document.getElementsByTagName('iframe')[0].contentWindow.$('#innerdocbody').html();
+					var padHtml = getAceFrame().$('#innerdocbody').html();
 					$('#md-preview-pad').html(elgg.markdown_wiki.ShowdownConvert($('<div>').html(padHtml.replace(/<div id="magic/g, '\n<div id="magic')).text()));
 				}
 
@@ -86,11 +88,32 @@ elgg.ggouv_pad.reload = function() {
 		});
 
 		// menus
-		$('.pad-wrapper .elgg-menu-markdown li').click(function() {
+		$('.pad-wrapper .elgg-menu-markdown li').click(function() { // yes use click not live
 			$(this).parent().find('li').removeClass('elgg-state-selected');
 			var paneName = $(this).addClass('elgg-state-selected').attr('class').split(' ')[0].split('-').pop(-1);
 
 			$('.pane-markdown .pane').removeClass('hidden').not('.'+paneName+'-markdown').addClass('hidden');
+		});
+
+		// over contributors
+		var getAuthorClassName = function(author) {
+				return "author-" + author.replace(/[^a-y0-9]/g, function(c) {
+					if (c == ".") return "-";
+					return 'z' + c.charCodeAt(0) + 'z';
+				});
+			};
+
+		$('#pad-authors .elgg-avatar').die().live({
+			mouseenter: function() {
+				var authorClass = getAuthorClassName($(this).attr('class').match(/\S*$/)[0].replace('-', '.')),
+					aceHead = getAceFrame().$('head');
+
+				aceHead.find('#hoveredContributors').remove();
+				aceHead.append('<style id="hoveredContributors" type="text/css">#innerdocbody span:not(.'+authorClass+') {opacity:0.3;}</style>');
+			},
+			mouseleave: function() {
+				getAceFrame().$('head').find('#hoveredContributors').remove();
+			}
 		});
 
 	} else {

@@ -29,12 +29,25 @@ body.fixed-pad {
 	border-right: none;
 	margin-left: 0;
 }
+#pad-authors .elgg-avatar {
+	padding: 2px 10px 2px 2px;
+	cursor: default;
+}
+#pad-authors .elgg-avatar:hover {
+	background: #CCC;
+}
 #pad-authors .pad-user {
 	height: 21px;
 	padding: 4px 5px 0;
 	color: #4690D6;
 }
+#pad-authors .pad-user:hover {
+	text-decoration: underline;
+}
 #pad-authors .pad-user.anonym {
 	color: gray;
 	font-style: italic;
+}
+#pad-authors .pad-user.anonym:hover {
+	text-decoration: none;
 }
