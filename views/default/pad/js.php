@@ -36,6 +36,18 @@ elgg.register_hook_handler('init', 'system', elgg.ggouv_pad.init);
 
 
 /**
+ * Tell etherpad-lite that current user leave pad. This send a USER_LEAVE to all connected client to this pad.
+ *
+ * This is triggered on ggouv_history/success hook, called just after ajax call return response and DOM are changed.
+ */
+elgg.ggouv_pad.leavePad = function() {
+	if ($('iframe.pad-iframe').length) $('.pad-iframe')[0].contentWindow.pad.socket.disconnect();
+};
+elgg.register_hook_handler('ggouv_history', 'success', elgg.ggouv_pad.leavePad);
+
+
+
+/**
  * Reload pad for full ajax website
  * @return {[type]} [description]
  */
