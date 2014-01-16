@@ -6,17 +6,23 @@
  */
 global $jsonexport;
 
+$mention = elgg_extract('mention', $vars, false);
+
 $object = $vars['item']->getObjectEntity();
 
 if ($object->getPrivateSetting('status') == 'open') {
-	$excerpt = strip_tags($object->description);
-	$excerpt = elgg_get_excerpt($excerpt, 140);
+	$excerpt = $object->description;
 } else {
-	$desc = json_decode($object->description);
-	$excerpt = elgg_get_excerpt(strip_tags($desc->description), 140);
+	$desc = unserialize($object->description);
+	$excerpt = strip_tags($desc[0]);
+}
+
+if ($mention) {
+	$vars['item']->message = deck_river_highlight_mention(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $excerpt), $mention);
+} else {
+	$vars['item']->message = elgg_get_excerpt(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $excerpt), 140);
 }
 
 $vars['item']->summary = elgg_view('river/elements/summary', array('item' => $vars['item']), FALSE, FALSE, 'default');
-$vars['item']->message = $excerpt;
 
 $jsonexport['results'][] = $vars['item'];

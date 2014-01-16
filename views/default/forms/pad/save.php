@@ -15,8 +15,8 @@ foreach ($variables as $name => $type) {
 			if ($vars['entity']->getPrivateSetting('status') == 'open') {
 				$vars[$name] = $vars['entity']->description;
 			} else {
-				$desc = json_decode($vars['entity']->description);
-				$vars[$name] = elgg_get_excerpt(strip_tags($desc->description), 140);
+				$desc = unserialize($vars['entity']->description);
+				$vars[$name] = elgg_get_excerpt(strip_tags($desc[0]), 140);
 			}
 		} else {
 			echo '<br />';

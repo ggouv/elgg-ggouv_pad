@@ -6,12 +6,17 @@
  */
 global $jsonexport;
 
+$mention = elgg_extract('mention', $vars, false);
+
 $object = $vars['item']->getObjectEntity();
 
-$desc = json_decode($object->description);
-$excerpt = elgg_get_excerpt(strip_tags($desc->description), 140);
+$desc = unserialize($object->description);
+if ($mention) {
+	$vars['item']->message = deck_river_highlight_mention(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $desc[0] . $desc[1]), $mention);
+} else {
+	$vars['item']->message = elgg_get_excerpt(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $desc[0]), 140);
+}
 
 $vars['item']->summary = elgg_view('river/elements/summary', array('item' => $vars['item']), FALSE, FALSE, 'default');
-$vars['item']->message = $excerpt;
 
 $jsonexport['results'][] = $vars['item'];

@@ -94,10 +94,7 @@ class ElggPad extends ElggObject {
 		$this->deleteMetadata('pname');
 		elgg_set_ignore_access($ia);
 
-		$this->description = json_encode(array(
-			'description' => $this->description,
-			'text' => $text
-		));
+		$this->description = serialize(array($this->description, $text));
 		$this->infos = serialize(array($lastedit, $revisions));
 		$this->save();
 

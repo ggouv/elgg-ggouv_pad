@@ -57,12 +57,9 @@ try {
 if (sizeof($input) > 0) {
 	foreach ($input as $name => $value) {
 		if ($name == 'description' && $pad->getPrivateSetting('status') == 'closed') {
-				$desc = json_decode($pad->description);
+				$desc = unserialize($pad->description);
 
-				$pad->$name = json_encode(array(
-					'description' => $value,
-					'text' => $desc->text
-				));
+				$pad->$name = serialize(array($value, $desc->text));
 		} else {
 			$pad->$name = $value;
 		}
