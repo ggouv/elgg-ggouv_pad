@@ -83,33 +83,41 @@ if ($full) {
 		try {
 
 			$body = '<div class="pad-wrapper float">';
-			$body .= elgg_view('output/iframe', array(
-				'value' => $pad->getPadPath(),
-				'class' => 'pad-iframe float',
-				'width' => '100%',
-				'height' => '400px',
-				'frameborder' => '0'
-			));
+			if ($container->canWriteToContainer()) {
+				$body .= elgg_view('output/iframe', array(
+					'value' => $pad->getPadPath(),
+					'class' => 'pad-iframe float',
+					'width' => '100%',
+					'height' => '400px',
+					'frameborder' => '0'
+				));
 
-			$tabs['preview'] = array(
-				'text' => elgg_echo('markdown_wiki:preview'),
-				'href' => "#",
-				'selected' => true,
-				'priority' => 200,
-			);
-			$tabs['help'] = array(
-				'text' => elgg_echo('markdown_wiki:syntax'),
-				'href' => "#",
-				'priority' => 300,
-			);
+				$tabs['preview'] = array(
+					'text' => elgg_echo('markdown_wiki:preview'),
+					'href' => "#",
+					'selected' => true,
+					'priority' => 200,
+				);
+				$tabs['help'] = array(
+					'text' => elgg_echo('markdown_wiki:syntax'),
+					'href' => "#",
+					'priority' => 300,
+				);
 
-			foreach ($tabs as $name => $tab) {
-				$tab['name'] = $name;
-				elgg_register_menu_item('markdown', $tab);
+				foreach ($tabs as $name => $tab) {
+					$tab['name'] = $name;
+					elgg_register_menu_item('markdown', $tab);
+				}
+
+				$body .= elgg_view_menu('markdown', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz markdown-menu prs t25 hidden'));
+				$body .= '<div class="pane-markdown hidden"><div id="md-preview-pad" class="pane preview-markdown markdown-body mlm pas"></div><div class="pane help-markdown hidden mlm pas"></div></div>';
+			} else {
+				$body .= elgg_view('output/longtext', array(
+					'value' => $pad->getPadMarkdown(),
+					'class' => 'mt'
+				));
 			}
 
-			$body .= elgg_view_menu('markdown', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz markdown-menu prs t25 hidden'));
-			$body .= '<div class="pane-markdown hidden"><div id="md-preview-pad" class="pane preview-markdown markdown-body mlm pas"></div><div class="pane help-markdown hidden mlm pas"></div></div>';
 			$body .= '</div>';
 
 
@@ -122,8 +130,7 @@ if ($full) {
 			'metadata_name' => 'infos',
 			'limit' => 0,
 		));
-		$desc = json_decode($pad->description);
-
+		$desc = unserialize($pad->description);
 		$status = '<span class="status declined">' . elgg_echo('pad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
 		$owner = get_entity($md[0]->owner_guid);
@@ -137,14 +144,14 @@ if ($full) {
 		}
 		$body = '<div class="elgg-heading-basic pam mvm">';
 		$body .= elgg_view('output/longtext', array(
-			'value' => $desc->description,
+			'value' => $desc[0],
 			'class' => 'mtn'
 		));
 
 		$body .= '<div class="ptm">' . $status . elgg_echo('pad:infos:closed', array($time, $owner_text)) . '</div></div>';
-		//$body .= '<div class="markdown-body">' . $pad->getPadMarkdown($desc->text) . '</div>';
+		//$body .= '<div class="markdown-body">' . $pad->getPadMarkdown($desc[1]) . '</div>';
 		$body .= elgg_view('output/longtext', array(
-			'value' => $pad->getPadMarkdown($desc->text)
+			'value' => $pad->getPadMarkdown($desc[1])
 		));
 	}
 	$params = array(
@@ -169,8 +176,8 @@ if ($full) {
 	if ($pad->getPrivateSetting('status') == 'open') {
 		$excerpt = elgg_get_excerpt($pad->description);
 	} else {
-		$desc = json_decode($pad->description);
-		$excerpt = $desc->description;
+		$desc = unserialize($pad->description);
+		$excerpt = $desc[0];
 		$status = '<span class="status declined mlm">' . elgg_echo('pad:status:closed') . '</span>';
 	}
 
