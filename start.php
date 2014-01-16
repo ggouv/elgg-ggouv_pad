@@ -221,7 +221,7 @@ function delete_pad_cron($hook, $entity_type, $returnvalue, $params) {
 			$lastEdited = $pad->getLastEdited()/1000;
 
 			if ( $lastEdited < ($time - $one_month) ) {
-				$pad->closePad();
+				$pad->closePad(true);
 			}
 		} catch (Exception $e){
 			$errors[$pad->getGUID()] = $e;

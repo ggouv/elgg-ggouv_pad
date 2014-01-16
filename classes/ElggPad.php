@@ -66,7 +66,7 @@ class ElggPad extends ElggObject {
 		return parent::delete();
 	}
 
-	function closePad(){
+	function closePad($cron = false){
 		$authors = $this->listAuthorsNamesOfPad();
 		$authors = array_unique($authors);
 
@@ -87,16 +87,22 @@ class ElggPad extends ElggObject {
 		$authors_guid = array();
 		foreach($authors as $author) {
 			$user = get_user_by_username($author);
-			add_entity_relationship($user->getGUID(), 'contributed_to', $this->getGUID());
+			if ($user) add_entity_relationship($user->getGUID(), 'contributed_to', $this->getGUID());
 		}
 
 		$ia = elgg_set_ignore_access(true);
+
 		$this->deleteMetadata('pname');
-		elgg_set_ignore_access($ia);
 
 		$this->description = serialize(array($this->description, $text));
-		$this->infos = serialize(array($lastedit, $revisions));
+		//$this->infos = serialize(array($lastedit, $revisions));
+
+		$owner_guid = $cron ? elgg_get_site_entity()->getGUID() : elgg_get_logged_in_user_guid();
+		create_metadata($this->getGUID(), 'infos', serialize(array($lastedit, $revisions)), '', $owner_guid, $this->access_id);
+
 		$this->save();
+
+		elgg_set_ignore_access($ia);
 
 		return true;
 	}

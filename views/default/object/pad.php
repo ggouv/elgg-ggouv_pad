@@ -134,7 +134,7 @@ if ($full) {
 		$status = '<span class="status declined">' . elgg_echo('pad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
 		$owner = get_entity($md[0]->owner_guid);
-		if ($owner) { // pad closed by someone
+		if ($owner->getGUID() != elgg_get_site_entity()->getGUID()) { // pad closed by someone
 			$owner_text = elgg_view('output/url', array(
 				'text' => $owner->username,
 				'href' => $owner->getURL()
