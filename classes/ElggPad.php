@@ -156,29 +156,25 @@ class ElggPad extends ElggObject {
 				$container = elgg_get_logged_in_user_entity();
 			}
 
-			if (isset($this->owner_guid)) {
-				$user = get_entity($this->owner_guid);
-			} else {
-				$user = elgg_get_logged_in_user_entity();
-			}
+			$user = elgg_get_logged_in_user_entity();
 
 			//$site_mask = preg_replace('https?://', '@', elgg_get_site_url());
 			$site_mask = str_replace('http://', '@', elgg_get_site_url());
 			$site_mask = str_replace('https://', '@', $site_mask);
 
 			//Etherpad: Create an etherpad group for the elgg container
-			if (!isset($container->etherpad_group_id)) {
-					$mappedGroup = $this->get_pad_client()->createGroupIfNotExistsFor($container->guid . $site_mask);
-					$container->etherpad_group_id = $mappedGroup->groupID;
+			if (!isset($container->pad_group_id)) {
+				$mappedGroup = $this->get_pad_client()->createGroupIfNotExistsFor($container->guid . $site_mask);
+				$container->pad_group_id = $mappedGroup->groupID;
 			}
-			$this->groupID = $container->etherpad_group_id;
+			$this->groupID = $container->pad_group_id;
 
 			//Etherpad: Create an author(etherpad user) for logged in user
-			if (!isset($user->etherpad_author_id)) {
-					$author = $this->get_pad_client()->createAuthorIfNotExistsFor($user->username . $site_mask, $user->username);
-					$user->etherpad_author_id = $author->authorID;
+			if (!isset($user->pad_author_id)) {
+				$author = $this->get_pad_client()->createAuthorIfNotExistsFor($user->username . $site_mask, $user->username);
+				$user->pad_author_id = $author->authorID;
 			}
-			$this->authorID = $user->etherpad_author_id;
+			$this->authorID = $user->pad_author_id;
 
 			//error_log("e $this->groupID $this->authorID");
 			//Etherpad: Create session
@@ -189,7 +185,7 @@ class ElggPad extends ElggObject {
 			$domain = "." . parse_url(elgg_get_site_url(), PHP_URL_HOST);
 
 			if(!setcookie('sessionID', $sessionID, $validUntil, '/', $domain)){
-					throw new Exception(elgg_echo('etherpad:error:cookies_required'));
+				throw new Exception(elgg_echo('etherpad:error:cookies_required'));
 			}
 
 			return $sessionID;
@@ -243,9 +239,9 @@ class ElggPad extends ElggObject {
 
 		$container = $this->getContainerEntity();
 
-		if ($container->canWriteToContainer() && !$timeslider) {
+		if (($container->canWriteToContainer() || $container instanceof ElggUser) && !$timeslider) {
 			return $this->getAddress() . $options;
-		} elseif ($container->canWriteToContainer() && $timeslider) {
+		} elseif (($container->canWriteToContainer() || $container instanceof ElggUser) && $timeslider) {
 			return $this->getTimesliderAddress() . $options;
 		} else {
 			return $this->getReadOnlyAddress() . $options;

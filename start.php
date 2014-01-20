@@ -48,7 +48,7 @@ function pad_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'pad_owner_block_menu');
 
 	// add to groups
-	add_group_tool_option('pad', elgg_echo('groups:enablepads'), false);
+	add_group_tool_option('pad', elgg_echo('groups:enablepads'), true);
 	elgg_extend_view('groups/tool_latest', 'pad/group_module');
 
 	// Register a URL handler for bookmarks

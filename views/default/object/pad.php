@@ -83,10 +83,10 @@ if ($full) {
 		try {
 
 			$body = '<div class="pad-wrapper float">';
-			if ($container->canWriteToContainer()) {
+			if ($container->canWriteToContainer() || $container instanceof ElggUser) {
 				$body .= elgg_view('output/iframe', array(
 					'value' => $pad->getPadPath(),
-					'class' => 'pad-iframe float',
+					'class' => 'pad-iframe float' . (($container->canWriteToContainer() || $container instanceof ElggUser) ? '' : ' mll'),
 					'width' => '100%',
 					'height' => '400px',
 					'frameborder' => '0'
@@ -114,7 +114,7 @@ if ($full) {
 			} else {
 				$body .= elgg_view('output/longtext', array(
 					'value' => $pad->getPadMarkdown(),
-					'class' => 'mt'
+					'class' => 'mtm'
 				));
 			}
 
@@ -134,7 +134,7 @@ if ($full) {
 		$status = '<span class="status declined">' . elgg_echo('pad:status:closed') . '</span>';
 		$time = elgg_get_friendly_time($md[0]->time_created);
 		$owner = get_entity($md[0]->owner_guid);
-		if ($owner->getGUID() != elgg_get_site_entity()->getGUID()) { // pad closed by someone
+		if ($owner && $owner->getGUID() != elgg_get_site_entity()->getGUID()) { // pad closed by someone
 			$owner_text = elgg_view('output/url', array(
 				'text' => $owner->username,
 				'href' => $owner->getURL()
